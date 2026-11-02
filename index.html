@@ -1,0 +1,1396 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title data-i18n="pageTitle">اهریوان | طراح سایت، گرافیک و پایتون</title>
+  <meta name="description" content="پورتفولیو و رزومه اهریوان — طراحی سایت، گرافیک، کامپیوتر و پایتون" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Vazirmatn', Tahoma, 'Segoe UI', sans-serif;
+      background: #FAFAF9;
+      color: #1C1917;
+      line-height: 1.7;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      transition: background-color 0.45s ease, color 0.45s ease;
+    }
+    body.dark { background: #0C0A09; color: #FAFAF9; }
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+    button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+    ul { list-style: none; }
+
+    /* Theme transition overlay effect */
+    .theme-flash {
+      position: fixed; inset: 0; z-index: 99999;
+      pointer-events: none; opacity: 0;
+      background: radial-gradient(circle at var(--tx, 50%) var(--ty, 50%), rgba(232,160,191,0.35), transparent 55%);
+      transition: opacity 0.35s ease;
+    }
+    .theme-flash.active { opacity: 1; }
+    body.dark .theme-flash {
+      background: radial-gradient(circle at var(--tx, 50%) var(--ty, 50%), rgba(232,160,191,0.2), transparent 55%);
+    }
+
+    .container { width: 100%; max-width: 1100px; margin: 0 auto; padding: 0 1.25rem; }
+    .section { padding: 5rem 0; transition: background-color 0.45s ease; }
+    .section-alt { background: linear-gradient(180deg, rgba(232,160,191,0.06), rgba(168,213,200,0.06)); }
+    body.dark .section-alt { background: linear-gradient(180deg, rgba(232,160,191,0.05), rgba(201,184,240,0.05)); }
+    /* dark section-alt handled above */
+    .section-title { text-align: center; margin-bottom: 3rem; }
+    .section-title .label { color: #D4849A; font-size: 0.875rem; font-weight: 500; margin-bottom: 0.5rem; }
+    body.dark .section-title .label { color: #E8A0BF; }
+    .section-title h2 { font-size: clamp(1.75rem, 4vw, 2.5rem); font-weight: 700; }
+    .section-title p { color: #78716C; margin-top: 0.75rem; font-size: 0.95rem; }
+    body.dark .section-title p { color: #A8A29E; }
+
+    /* Cursor */
+    .cursor-dot, .cursor-outline {
+      position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999;
+      transform: translate(-50%,-50%); border-radius: 50%; display: none;
+    }
+    .cursor-dot {
+      width: 8px; height: 8px; background: var(--c, #D4849A); transition: width .2s, height .2s; }
+    .cursor-outline {
+      width: 40px; height: 40px; border: 1.5px solid var(--c, #D4849A); opacity: .55; transition: width .3s, height .3s, opacity .3s; z-index: 9998; }
+    .cursor-dot.hover { width: 14px; height: 14px; }
+    .cursor-outline.hover { width: 56px; height: 56px; opacity: .25; }
+    body.custom-cursor { cursor: none; }
+    body.custom-cursor a, body.custom-cursor button, body.custom-cursor label { cursor: none; }
+    @media (max-width: 768px) {
+      .cursor-dot, .cursor-outline { display: none !important; }
+      body.custom-cursor, body.custom-cursor * { cursor: auto !important; }
+    }
+
+    /* Header */
+    .header {
+      position: fixed; top: 0; right: 0; left: 0; z-index: 100;
+      background: rgba(250,250,249,0.88); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid transparent; transition: background-color .45s, border-color .3s, box-shadow .3s;
+    }
+    body.dark .header { background: rgba(12,10,9,0.88); }
+    .header.scrolled { border-bottom-color: #E7E5E4; box-shadow: 0 1px 3px rgba(0,0,0,.06); }
+    body.dark .header.scrolled { border-bottom-color: #292524; }
+    .header-inner { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+    .logo { font-size: 1.35rem; font-weight: 700; display: flex; align-items: center; }
+    .logo-img img { height: 36px; width: auto; max-width: 160px; object-fit: contain; display: block; }
+    .logo-img .logo-light { display: block; }
+    .logo-img .logo-dark { display: none; }
+    body.dark .logo-img .logo-light { display: none; }
+    body.dark .logo-img .logo-dark { display: block; }
+    .logo-fallback { display: none; }
+    /* if images fail to load, show text via onerror on both - handled lightly */
+    .logo span { color: #D4849A; }
+    body.dark .logo span { color: #E8A0BF; }
+    .nav { display: none; gap: 1.75rem; }
+    .nav a { font-size: .9rem; font-weight: 500; color: #57534E; transition: color .2s; }
+    body.dark .nav a { color: #A8A29E; }
+    .nav a:hover { color: #D4849A; }
+    body.dark .nav a:hover { color: #E8A0BF; }
+    .header-actions { display: flex; align-items: center; gap: .6rem; }
+    .btn-icon {
+      width: 36px; height: 36px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .2s, transform .25s;
+    }
+    .btn-icon:hover { background: #E7E5E4; }
+    body.dark .btn-icon:hover { background: #292524; }
+    .btn-icon.spin { transform: rotate(180deg); }
+    .btn-lang {
+      font-size: .75rem; font-weight: 600; min-width: 40px;
+      padding: .3rem .65rem; border-radius: 999px;
+      border: 1px solid #D6D3D1; transition: all .2s;
+    }
+    body.dark .btn-lang { border-color: #44403C; }
+    .btn-lang:hover { border-color: #D4849A; color: #D4849A; }
+    .btn-primary {
+      display: none; background: #D4849A; color: #fff;
+      font-size: .875rem; font-weight: 500; padding: .5rem 1.1rem; border-radius: 999px; transition: background .2s;
+    }
+    .btn-primary:hover { background: #C97B8F; }
+    body.dark .btn-primary { background: #E8A0BF; }
+    body.dark .btn-primary:hover { background: #D4849A; }
+    .btn-menu { display: flex; }
+    @media (min-width: 768px) {
+      .nav { display: flex; }
+      .btn-primary { display: inline-flex; }
+      .btn-menu { display: none; }
+    }
+    .mobile-menu {
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      border-top: 1px solid transparent;
+      padding: 0 0;
+      transition: max-height 0.35s ease, opacity 0.3s ease, padding 0.3s ease, border-color 0.3s ease;
+    }
+    body.dark .mobile-menu { border-top-color: transparent; }
+    .mobile-menu.open {
+      max-height: 360px;
+      opacity: 1;
+      border-top-color: #E7E5E4;
+      padding: 1rem 0;
+    }
+    body.dark .mobile-menu.open { border-top-color: #292524; }
+    .mobile-menu a {
+      transform: translateY(-6px);
+      opacity: 0;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+    .mobile-menu.open a {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    .mobile-menu.open a:nth-child(1) { transition-delay: 0.04s; }
+    .mobile-menu.open a:nth-child(2) { transition-delay: 0.08s; }
+    .mobile-menu.open a:nth-child(3) { transition-delay: 0.12s; }
+    .mobile-menu.open a:nth-child(4) { transition-delay: 0.16s; }
+    .mobile-menu.open a:nth-child(5) { transition-delay: 0.2s; }
+    .mobile-menu.open a:nth-child(6) { transition-delay: 0.24s; }
+    .btn-menu .icon { transition: transform 0.3s ease; }
+    .btn-menu.is-open .icon { transform: rotate(90deg); }
+    .mobile-menu a { display: block; padding: .65rem 0; color: #44403C; font-weight: 500; }
+    body.dark .mobile-menu a { color: #D6D3D1; }
+    .mobile-menu .btn-primary { display: flex; justify-content: center; margin-top: .75rem; width: 100%; }
+
+    /* Hero */
+    .hero { min-height: 100vh; display: flex; align-items: center; padding-top: 5rem; padding-bottom: 4rem; }
+    .hero-grid { display: grid; gap: 2.5rem; align-items: center; }
+    @media (min-width: 992px) { .hero-grid { grid-template-columns: 1.2fr .8fr; gap: 3rem; } }
+    .badge {
+      display: inline-flex; align-items: center; gap: .5rem;
+      background: rgba(212,132,154,.1); color: #D4849A;
+      font-size: .875rem; font-weight: 500; padding: .4rem .85rem; border-radius: 999px; margin-bottom: 1.25rem;
+    }
+    body.dark .badge { background: rgba(232,160,191,.15); color: #E8A0BF; }
+    .badge-dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+    .hero-greeting { color: #78716C; font-size: 1.1rem; margin-bottom: .25rem; }
+    body.dark .hero-greeting { color: #A8A29E; }
+    .hero h1 { font-size: clamp(2.2rem, 5vw, 3.5rem); font-weight: 800; line-height: 1.2; margin-bottom: 1.25rem; }
+    .hero h1 .accent {
+      background: linear-gradient(135deg, #D4849A, #C4B5E0);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    body.dark .hero h1 .accent {
+      background: linear-gradient(135deg, #E8A0BF, #C9B8F0);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .hero-desc { font-size: 1.1rem; color: #57534E; max-width: 34rem; margin-bottom: 1.25rem; }
+    body.dark .hero-desc { color: #A8A29E; }
+    .hero-meta { display: flex; flex-wrap: wrap; gap: 1.25rem; font-size: .875rem; color: #78716C; margin-bottom: 1.75rem; }
+    body.dark .hero-meta { color: #A8A29E; }
+    .hero-meta span { display: flex; align-items: center; gap: .35rem; }
+    .hero-btns { display: flex; flex-wrap: wrap; gap: .75rem; margin-bottom: 2rem; }
+    .btn {
+      display: inline-flex; align-items: center; gap: .5rem;
+      font-weight: 500; font-size: .95rem; padding: .7rem 1.4rem; border-radius: 999px; transition: all .2s;
+    }
+    .btn-dark { background: #1C1917; color: #FAFAF9; }
+    body.dark .btn-dark { background: #F5F5F4; color: #1C1917; }
+    .btn-dark:hover { opacity: .9; }
+    .btn-outline { border: 1px solid #D6D3D1; }
+    body.dark .btn-outline { border-color: #44403C; }
+    .btn-outline:hover { border-color: #D4849A; color: #D4849A; }
+    body.dark .btn-outline:hover { border-color: #E8A0BF; color: #E8A0BF; }
+    .hero-stats { display: flex; gap: 2rem; padding-top: 1.75rem; border-top: 1px solid #E7E5E4; }
+    body.dark .hero-stats { border-top-color: #292524; }
+    .hero-stats strong { display: block; font-size: 1.5rem; font-weight: 700; }
+    .hero-stats span { font-size: .8rem; color: #78716C; }
+    body.dark .hero-stats span { color: #A8A29E; }
+
+    .profile-card {
+      background: #fff; border: 1px solid #E7E5E4; border-radius: 1.5rem; padding: 1.75rem;
+      text-align: center; max-width: 320px; margin: 0 auto; box-shadow: 0 1px 3px rgba(0,0,0,.04);
+      transition: background-color .45s, border-color .45s;
+    }
+    body.dark .profile-card { background: #1C1917; border-color: #292524; }
+    @media (min-width: 992px) { .profile-card { margin: 0 0 0 auto; } }
+    .avatar-wrap { position: relative; width: 112px; height: 112px; margin: 0 auto 1rem; }
+    .avatar {
+      width: 112px; height: 112px; border-radius: 50%; overflow: hidden; background: #E7E5E4;
+      border: 4px solid #F5F5F4; display: flex; align-items: center; justify-content: center;
+    }
+    body.dark .avatar { background: #292524; border-color: #1C1917; }
+    .avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .avatar svg { width: 48px; height: 48px; color: #A8A29E; }
+    .avatar-upload {
+      position: absolute; bottom: 0; left: 0; width: 36px; height: 36px; border-radius: 50%;
+      background: #D4849A; color: #fff; display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,.15); transition: background .2s;
+    }
+    .avatar-upload:hover { background: #C97B8F; }
+    body.dark .avatar-upload { background: #E8A0BF; }
+    .avatar-upload input { display: none; }
+    .profile-card h3 { font-size: 1.15rem; font-weight: 700; }
+    .profile-card .role { font-size: .875rem; color: #78716C; margin-top: .2rem; }
+    body.dark .profile-card .role { color: #A8A29E; }
+    .profile-card .loc { font-size: .75rem; color: #A8A29E; margin-top: .15rem; }
+    .resume-btn {
+      display: flex; align-items: center; justify-content: center; gap: .5rem; width: 100%;
+      margin-top: 1.25rem; padding: .7rem; border-radius: .75rem;
+      background: #D4849A; color: #fff; font-size: .875rem; font-weight: 500; transition: background .2s;
+    }
+    body.dark .resume-btn { background: #E8A0BF; }
+    .resume-btn:hover { background: #C97B8F; }
+    body.dark .resume-btn:hover { background: #D4849A; }
+    .resume-hint { font-size: .7rem; color: #A8A29E; margin-top: .5rem; }
+
+    /* Skills */
+    .skills-grid { display: grid; gap: 1rem; grid-template-columns: 1fr; }
+    @media (min-width: 576px) { .skills-grid { grid-template-columns: 1fr 1fr; } }
+    @media (min-width: 992px) { .skills-grid { grid-template-columns: 1fr 1fr 1fr; } }
+    .skill-card {
+      background: #fff; border: 1px solid #E7E5E4; border-radius: 1rem; padding: 1.25rem;
+      transition: background-color .45s, border-color .45s;
+    }
+    body.dark .skill-card { background: #1C1917; border-color: #292524; }
+    .skill-card-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: .75rem; }
+    .skill-card-head strong { font-weight: 600; }
+    .skill-level { font-size: .7rem; font-weight: 500; color: #D4849A; }
+    body.dark .skill-level { color: #E8A0BF; }
+    .skill-bar { height: 4px; border-radius: 2px; background: #E7E5E4; overflow: hidden; }
+    body.dark .skill-bar { background: #292524; }
+    .skill-fill { height: 100%; border-radius: 2px; background: #D4849A; }
+    body.dark .skill-fill { background: #E8A0BF; }
+
+    /* Experience */
+    .timeline { position: relative; max-width: 700px; margin: 0 auto; }
+    .timeline::before {
+      content: ''; position: absolute; right: 11px; top: 0; bottom: 0; width: 2px; background: #E7E5E4;
+    }
+    html[dir="ltr"] .timeline::before { right: auto; left: 11px; }
+    body.dark .timeline::before { background: #292524; }
+    .timeline-item { position: relative; padding-right: 2.5rem; padding-bottom: 2rem; }
+    html[dir="ltr"] .timeline-item { padding-right: 0; padding-left: 2.5rem; }
+    .timeline-item:last-child { padding-bottom: 0; }
+    .timeline-dot {
+      position: absolute; right: 0; top: 4px; width: 24px; height: 24px; border-radius: 50%;
+      border: 4px solid #FAFAF9; background: #D6D3D1;
+    }
+    html[dir="ltr"] .timeline-dot { right: auto; left: 0; }
+    body.dark .timeline-dot { border-color: #0C0A09; background: #57534E; }
+    .timeline-dot.active { background: #D4849A; }
+    body.dark .timeline-dot.active { background: #E8A0BF; }
+    .timeline-card {
+      background: #fff; border: 1px solid #E7E5E4; border-radius: 1rem; padding: 1.25rem 1.5rem;
+      transition: background-color .45s, border-color .45s;
+    }
+    body.dark .timeline-card { background: #1C1917; border-color: #292524; }
+    .timeline-card-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .5rem; margin-bottom: .35rem; }
+    .timeline-card h3 { font-size: 1.05rem; font-weight: 700; }
+    .timeline-date { font-size: .75rem; padding: .2rem .6rem; border-radius: 999px; background: #F5F5F4; color: #78716C; }
+    body.dark .timeline-date { background: #292524; color: #A8A29E; }
+    .timeline-company { font-size: .875rem; color: #D4849A; margin-bottom: .65rem; }
+    body.dark .timeline-company { color: #E8A0BF; }
+    .timeline-card p { font-size: .875rem; color: #57534E; margin-bottom: .85rem; }
+    body.dark .timeline-card p { color: #A8A29E; }
+    .tags { display: flex; flex-wrap: wrap; gap: .4rem; }
+    .tag { font-size: .7rem; padding: .2rem .55rem; border-radius: .4rem; background: #F5F5F4; color: #57534E; }
+    body.dark .tag { background: #292524; color: #A8A29E; }
+
+    /* Portfolio */
+    .portfolio-stats { display: flex; flex-wrap: wrap; justify-content: center; gap: 1.5rem 2.5rem; margin-bottom: 2.5rem; }
+    .stat-item { text-align: center; }
+    .stat-item strong { display: block; font-size: 1.75rem; font-weight: 700; color: #D4849A; }
+    body.dark .stat-item strong { color: #E8A0BF; }
+    .stat-item span { font-size: .85rem; color: #78716C; }
+    body.dark .stat-item span { color: #A8A29E; }
+    .filters { display: flex; flex-wrap: wrap; justify-content: center; gap: .5rem; margin-bottom: 2rem; }
+    .filter-btn {
+      font-size: .875rem; font-weight: 500; padding: .45rem 1rem; border-radius: 999px;
+      background: #E7E5E4; color: #44403C; transition: all .2s;
+    }
+    body.dark .filter-btn { background: #292524; color: #D6D3D1; }
+    .filter-btn:hover, .filter-btn.active { background: #D4849A; color: #fff; }
+    body.dark .filter-btn:hover, body.dark .filter-btn.active { background: #E8A0BF; color: #fff; }
+    .portfolio-grid { display: grid; gap: 1.25rem; grid-template-columns: 1fr; }
+    @media (min-width: 576px) { .portfolio-grid { grid-template-columns: 1fr 1fr; } }
+    @media (min-width: 992px) { .portfolio-grid { grid-template-columns: 1fr 1fr 1fr; } }
+    .portfolio-thumb {
+      aspect-ratio: 4/3; border-radius: 1rem; overflow: hidden;
+      background: linear-gradient(135deg, #E7E5E4, #D6D3D1);
+      margin-bottom: .85rem; position: relative;
+      display: flex; align-items: center; justify-content: center;
+    }
+    body.dark .portfolio-thumb { background: linear-gradient(135deg, #292524, #1C1917); }
+    .portfolio-thumb svg { width: 56px; height: 56px; color: #A8A29E; opacity: .35; }
+    .portfolio-item:hover .portfolio-thumb::after {
+      content: ''; position: absolute; inset: 0; background: rgba(212,132,154,.1);
+    }
+    .portfolio-info { display: flex; justify-content: space-between; align-items: flex-start; gap: .5rem; }
+    .portfolio-info h3 { font-weight: 600; font-size: 1rem; transition: color .2s; }
+    .portfolio-item:hover .portfolio-info h3 { color: #D4849A; }
+    body.dark .portfolio-item:hover .portfolio-info h3 { color: #E8A0BF; }
+    .portfolio-info p { font-size: .8rem; color: #78716C; margin-top: .15rem; }
+    body.dark .portfolio-info p { color: #A8A29E; }
+    .portfolio-year {
+      font-size: .7rem; padding: .15rem .5rem; border-radius: 999px;
+      background: #E7E5E4; color: #78716C; white-space: nowrap;
+    }
+    body.dark .portfolio-year { background: #292524; color: #A8A29E; }
+
+    /* Services */
+    .services-grid { display: grid; gap: 1.25rem; grid-template-columns: 1fr; }
+    @media (min-width: 576px) { .services-grid { grid-template-columns: 1fr 1fr; } }
+    @media (min-width: 992px) { .services-grid { grid-template-columns: 1fr 1fr 1fr; } }
+    .service-card {
+      border: 1px solid #E7E5E4; border-radius: 1rem; padding: 1.5rem; transition: border-color .2s, background-color .45s;
+    }
+    body.dark .service-card { border-color: #292524; }
+    .service-card:hover { border-color: rgba(212,132,154,.4); }
+    .service-icon {
+      width: 44px; height: 44px; border-radius: .75rem; background: rgba(212,132,154,.1);
+      display: flex; align-items: center; justify-content: center; margin-bottom: 1rem; color: #D4849A;
+    }
+    body.dark .service-icon { background: rgba(232,160,191,.15); color: #E8A0BF; }
+    .service-icon svg { width: 22px; height: 22px; }
+    .service-card h3 { font-size: 1.05rem; font-weight: 600; margin-bottom: .5rem; }
+    .service-card p { font-size: .875rem; color: #57534E; }
+    body.dark .service-card p { color: #A8A29E; }
+
+    /* Contact */
+    .contact { text-align: center; }
+    .contact-desc { color: #57534E; max-width: 28rem; margin: 0 auto 2rem; }
+    body.dark .contact-desc { color: #A8A29E; }
+    .contact-email {
+      display: inline-flex; align-items: center; gap: .6rem;
+      background: #D4849A; color: #fff; font-size: 1.1rem; font-weight: 500;
+      padding: .9rem 1.75rem; border-radius: 999px; transition: background .2s;
+    }
+    .contact-email:hover { background: #C97B8F; }
+    body.dark .contact-email { background: #E8A0BF; }
+    body.dark .contact-email:hover { background: #D4849A; }
+    .socials { display: flex; justify-content: center; gap: .75rem; margin-top: 2rem; }
+    .social {
+      width: 44px; height: 44px; border-radius: 50%; border: 1px solid #D6D3D1;
+      display: flex; align-items: center; justify-content: center; transition: all .2s;
+    }
+    body.dark .social { border-color: #44403C; }
+    .social:hover { border-color: #D4849A; color: #D4849A; }
+    body.dark .social:hover { border-color: #E8A0BF; color: #E8A0BF; }
+    .social svg { width: 20px; height: 20px; }
+
+    /* Footer */
+    .footer { border-top: 1px solid #E7E5E4; padding: 1.5rem 0; transition: border-color .45s; }
+    body.dark .footer { border-top-color: #292524; }
+    .footer-inner {
+      display: flex; flex-direction: column; align-items: center; gap: .75rem;
+      font-size: .875rem; color: #78716C;
+    }
+    body.dark .footer-inner { color: #A8A29E; }
+    @media (min-width: 576px) { .footer-inner { flex-direction: row; justify-content: space-between; } }
+    .footer-status { display: flex; align-items: center; gap: 1rem; }
+    .status-dot {
+      display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+      background: #22C55E; animation: pulse 2s infinite; margin-inline-start: .35rem;
+    }
+    .clock { font-variant-numeric: tabular-nums; font-family: monospace; }
+    .icon { width: 1em; height: 1em; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+
+    /* LTR adjustments */
+    html[dir="ltr"] body { font-family: 'Vazirmatn', system-ui, -apple-system, sans-serif; }
+
+    .btn-resume {
+      background: transparent;
+      border: 1px solid #D4849A;
+      color: #D4849A;
+    }
+    body.dark .btn-resume { border-color: #E8A0BF; color: #E8A0BF; }
+    .btn-resume:hover { background: #D4849A; color: #fff; }
+    body.dark .btn-resume:hover { background: #E8A0BF; color: #fff; }
+    :root {
+      --accent: #E8A0BF;
+      --accent-strong: #D4849A;
+      --accent-2: #A8D5C8;
+      --accent-3: #C4B5E0;
+      --accent-4: #A8C5E2;
+      --accent-5: #F5D0A9;
+    }
+    body.dark {
+      --accent: #E8A0BF;
+      --accent-strong: #F0B8CE;
+      --accent-2: #8FCFC0;
+      --accent-3: #C9B8F0;
+      --accent-4: #9EC0E8;
+      --accent-5: #F0C89A;
+    }
+    .hero-visual {
+      display: flex; flex-direction: column; align-items: center; gap: 1.25rem;
+    }
+    .orbit-stage {
+      position: relative;
+      width: min(320px, 80vw);
+      height: min(320px, 80vw);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .orbit-glow {
+      position: absolute; inset: 12%;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(212,132,154,0.22) 0%, rgba(196,181,224,0.12) 45%, transparent 70%);
+      animation: glowPulse 4s ease-in-out infinite;
+      filter: blur(4px);
+    }
+    body.dark .orbit-glow {
+      background: radial-gradient(circle, rgba(232,160,191,0.25) 0%, rgba(201,184,240,0.15) 45%, transparent 70%);
+    }
+    .orbit-ring {
+      position: absolute; border-radius: 50%;
+      border: 1.5px dashed transparent;
+      border-top-color: var(--accent);
+      border-right-color: var(--accent-3);
+      border-bottom-color: var(--accent-2);
+      border-left-color: var(--accent-4);
+      opacity: 0.55;
+    }
+    .orbit-ring-1 { inset: 0; animation: spin 18s linear infinite; }
+    .orbit-ring-2 {
+      inset: 8%; opacity: 0.35; border-style: solid; border-width: 1px;
+      animation: spin 28s linear infinite reverse;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes glowPulse {
+      0%, 100% { transform: scale(1); opacity: 0.7; }
+      50% { transform: scale(1.06); opacity: 1; }
+    }
+    .avatar-large {
+      position: relative; z-index: 2;
+      width: 58%; height: 58%;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 4px solid rgba(255,255,255,0.9);
+      box-shadow: 0 0 0 6px rgba(212,132,154,0.15), 0 12px 40px rgba(0,0,0,0.12);
+      background: #E7E5E4;
+      display: flex; align-items: center; justify-content: center;
+    }
+    body.dark .avatar-large {
+      border-color: rgba(28,25,23,0.9);
+      box-shadow: 0 0 0 6px rgba(232,160,191,0.2), 0 12px 40px rgba(0,0,0,0.4);
+      background: #292524;
+    }
+    .avatar-large img { width: 100%; height: 100%; object-fit: cover; }
+    .avatar-fallback { display: none; font-size: 2.5rem; font-weight: 800; color: #A8A29E; }
+    .avatar-large.no-img .avatar-fallback { display: block; }
+    .avatar-large.no-img img { display: none; }
+    .float-chip {
+      position: absolute; z-index: 3;
+      font-size: 0.7rem; font-weight: 600;
+      padding: 0.35rem 0.7rem; border-radius: 999px;
+      background: #fff; color: #44403C;
+      border: 1px solid #E7E5E4;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+      animation: floatY 4s ease-in-out infinite;
+      white-space: nowrap;
+    }
+    body.dark .float-chip {
+      background: #1C1917; color: #E7E5E4; border-color: #292524;
+    }
+    .chip-1 { top: 8%; right: 0; color: #5BAF9E; animation-delay: 0s; }
+    .chip-2 { top: 22%; left: -4%; color: #6B9BD1; animation-delay: 0.5s; }
+    .chip-3 { bottom: 28%; left: -2%; color: #9B8AC4; animation-delay: 1s; }
+    .chip-4 { bottom: 10%; right: 4%; color: #D4849A; animation-delay: 1.4s; }
+    .chip-5 { top: 42%; right: -8%; color: #D4A0B8; animation-delay: 0.8s; }
+    .chip-6 { bottom: 42%; left: -10%; color: #D4B896; animation-delay: 1.8s; }
+    body.dark .chip-1 { color: #8FCFC0; }
+    body.dark .chip-2 { color: #9EC0E8; }
+    body.dark .chip-3 { color: #C9B8F0; }
+    body.dark .chip-4 { color: #F0B8CE; }
+    body.dark .chip-5 { color: #E8B4C8; }
+    body.dark .chip-6 { color: #F0C89A; }
+    @keyframes floatY {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    .hero-visual-meta { text-align: center; }
+    .hero-visual-meta strong { display: block; font-size: 1.2rem; font-weight: 700; margin-bottom: 0.2rem; }
+    .hero-visual-meta span { display: block; font-size: 0.85rem; color: #78716C; }
+    body.dark .hero-visual-meta span { color: #A8A29E; }
+    .hero-visual-meta .loc { font-size: 0.75rem; margin-top: 0.25rem; color: #A8A29E; }
+    @media (max-width: 991px) {
+      .orbit-stage { width: min(260px, 70vw); height: min(260px, 70vw); margin: 0 auto; }
+      .float-chip { font-size: 0.65rem; padding: 0.25rem 0.55rem; }
+    }
+
+
+    /* Color picker */
+    .color-picker-wrap { position: relative; }
+    .color-panel {
+      display: flex;
+      position: absolute;
+      top: calc(100% + 10px);
+      right: 0;
+      background: #fff;
+      border: 1px solid #E7E5E4;
+      border-radius: 12px;
+      padding: 0.55rem;
+      gap: 0.45rem;
+      box-shadow: 0 10px 28px rgba(0,0,0,0.12);
+      z-index: 300;
+      flex-wrap: wrap;
+      width: 128px;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-8px) scale(0.95);
+      pointer-events: none;
+      transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s;
+    }
+    html[dir="ltr"] .color-panel { right: auto; left: 0; }
+    body.dark .color-panel {
+      background: #1C1917;
+      border-color: #292524;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    }
+    .color-panel.open {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0) scale(1);
+      pointer-events: auto;
+    }
+    .color-panel.open .color-swatch {
+      animation: swatchIn 0.3s ease backwards;
+    }
+    .color-panel.open .color-swatch:nth-child(1) { animation-delay: 0.02s; }
+    .color-panel.open .color-swatch:nth-child(2) { animation-delay: 0.05s; }
+    .color-panel.open .color-swatch:nth-child(3) { animation-delay: 0.08s; }
+    .color-panel.open .color-swatch:nth-child(4) { animation-delay: 0.11s; }
+    .color-panel.open .color-swatch:nth-child(5) { animation-delay: 0.14s; }
+    .color-panel.open .color-swatch:nth-child(6) { animation-delay: 0.17s; }
+    @keyframes swatchIn {
+      from { opacity: 0; transform: scale(0.6); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    .color-swatch {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: transform 0.15s, border-color 0.15s;
+      padding: 0;
+    }
+    .color-swatch:hover { transform: scale(1.12); }
+    .color-swatch.active {
+      border-color: #1C1917;
+      box-shadow: 0 0 0 2px #fff, 0 0 0 3px currentColor;
+    }
+    body.dark .color-swatch.active {
+      border-color: #FAFAF9;
+      box-shadow: 0 0 0 2px #1C1917, 0 0 0 3px #FAFAF9;
+    }
+
+    /* ===== Color themes (pastel) ===== */
+    /* Rose (default) */
+    body, body[data-color="rose"] {
+      --c: #D4849A;
+      --c-soft: #E8A0BF;
+      --c-hover: #C97B8F;
+      --c-rgb: 212, 132, 154;
+      --c2: #A8D5C8;
+      --c3: #C4B5E0;
+      --c4: #A8C5E2;
+    }
+    body[data-color="mint"] {
+      --c: #6BB3A4;
+      --c-soft: #A8D5C8;
+      --c-hover: #5A9E90;
+      --c-rgb: 107, 179, 164;
+      --c2: #E8A0BF;
+      --c3: #C4B5E0;
+      --c4: #F5D0A9;
+    }
+    body[data-color="lavender"] {
+      --c: #9B8AC4;
+      --c-soft: #C4B5E0;
+      --c-hover: #8A79B3;
+      --c-rgb: 155, 138, 196;
+      --c2: #A8D5C8;
+      --c3: #E8A0BF;
+      --c4: #A8C5E2;
+    }
+    body[data-color="sky"] {
+      --c: #6B9BD1;
+      --c-soft: #A8C5E2;
+      --c-hover: #5A8AC0;
+      --c-rgb: 107, 155, 209;
+      --c2: #A8D5C8;
+      --c3: #C4B5E0;
+      --c4: #E8A0BF;
+    }
+    body[data-color="peach"] {
+      --c: #E0B07A;
+      --c-soft: #F5D0A9;
+      --c-hover: #C99A65;
+      --c-rgb: 224, 176, 122;
+      --c2: #A8D5C8;
+      --c3: #E8A0BF;
+      --c4: #C4B5E0;
+    }
+    body[data-color="coral"] {
+      --c: #E08B7C;
+      --c-soft: #F0A89A;
+      --c-hover: #C9786A;
+      --c-rgb: 224, 139, 124;
+      --c2: #A8D5C8;
+      --c3: #C4B5E0;
+      --c4: #A8C5E2;
+    }
+
+    /* Map old hard colors to CSS variables where critical UI uses accent */
+    .logo span, .section-title .label, .badge, .timeline-company,
+    .skill-level, .stat-item strong, .filter-btn:hover, .filter-btn.active,
+    .nav a:hover, .btn-lang:hover {
+      /* keep structure; override key accent usages below */
+    }
+    .logo span { color: var(--c) !important; }
+    body.dark .logo span { color: var(--c-soft) !important; }
+    .section-title .label { color: var(--c) !important; }
+    body.dark .section-title .label { color: var(--c-soft) !important; }
+    .badge {
+      background: rgba(var(--c-rgb), 0.12) !important;
+      color: var(--c) !important;
+    }
+    body.dark .badge {
+      background: rgba(var(--c-rgb), 0.18) !important;
+      color: var(--c-soft) !important;
+    }
+    .btn-primary, .contact-email, .resume-btn, .skill-fill,
+    .timeline-dot.active, .filter-btn.active, .filter-btn:hover {
+      background: var(--c) !important;
+      border-color: var(--c) !important;
+      color: #fff !important;
+    }
+    .btn-primary:hover, .contact-email:hover {
+      background: var(--c-hover) !important;
+    }
+    .btn-resume {
+      background: transparent !important;
+      border: 1px solid var(--c) !important;
+      color: var(--c) !important;
+    }
+    .btn-resume:hover {
+      background: var(--c) !important;
+      color: #fff !important;
+    }
+    .btn-outline:hover {
+      border-color: var(--c) !important;
+      color: var(--c) !important;
+    }
+    .skill-level, .timeline-company, .stat-item strong {
+      color: var(--c) !important;
+    }
+    body.dark .skill-level, body.dark .timeline-company, body.dark .stat-item strong {
+      color: var(--c-soft) !important;
+    }
+    .skill-fill { background: var(--c) !important; }
+    .nav a:hover, .btn-lang:hover { color: var(--c) !important; border-color: var(--c) !important; }
+    .service-icon {
+      background: rgba(var(--c-rgb), 0.12) !important;
+      color: var(--c) !important;
+    }
+    .service-card:hover { border-color: rgba(var(--c-rgb), 0.45) !important; }
+    .orbit-ring {
+      border-top-color: var(--c) !important;
+      border-right-color: var(--c3) !important;
+      border-bottom-color: var(--c2) !important;
+      border-left-color: var(--c4) !important;
+    }
+    .orbit-glow {
+      background: radial-gradient(circle, rgba(var(--c-rgb), 0.25) 0%, rgba(var(--c-rgb), 0.08) 50%, transparent 70%) !important;
+    }
+    .avatar-large {
+      box-shadow: 0 0 0 6px rgba(var(--c-rgb), 0.18), 0 12px 40px rgba(0,0,0,0.12) !important;
+    }
+    body.dark .avatar-large {
+      box-shadow: 0 0 0 6px rgba(var(--c-rgb), 0.25), 0 12px 40px rgba(0,0,0,0.4) !important;
+    }
+    .portfolio-item:hover .portfolio-info h3 { color: var(--c) !important; }
+    .social:hover { border-color: var(--c) !important; color: var(--c) !important; }
+    .theme-flash {
+      background: radial-gradient(circle at var(--tx, 50%) var(--ty, 50%), rgba(var(--c-rgb), 0.35), transparent 55%) !important;
+    }
+
+
+    .portfolio-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.45s ease;
+    }
+    .portfolio-item:hover .portfolio-thumb img {
+      transform: scale(1.06);
+    }
+    .portfolio-thumb {
+      background: #E7E5E4 !important;
+    }
+    body.dark .portfolio-thumb {
+      background: #292524 !important;
+    }
+    .portfolio-thumb::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.35), transparent 50%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+    .portfolio-item:hover .portfolio-thumb::after {
+      opacity: 1;
+    }
+
+
+    .btn-download-header {
+      display: inline-flex;
+      font-size: 0.8rem; font-weight: 500;
+      padding: 0.45rem 0.85rem; border-radius: 999px;
+      border: 1px solid var(--c, #D4849A);
+      color: var(--c, #D4849A);
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .btn-download-header:hover {
+      background: var(--c, #D4849A);
+      color: #fff;
+    }
+
+    .contact .label, .contact-label {
+      color: var(--c) !important;
+      font-size: .875rem;
+      font-weight: 500;
+      margin-bottom: .5rem;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="theme-flash" id="themeFlash"></div>
+  <div class="cursor-dot" id="cursorDot"></div>
+  <div class="cursor-outline" id="cursorOutline"></div>
+
+  <header class="header" id="header">
+    <div class="container header-inner">
+      <a href="#home" class="logo logo-img">
+        <img src="logo-light.png" alt="اهریوان" class="logo-light" height="36" />
+        <img src="logo-dark.png" alt="اهریوان" class="logo-dark" height="36" />
+        <span class="logo-fallback">اهریوان<span style="color:#D4849A">.</span></span>
+      </a>
+      <nav class="nav">
+        <a href="#home" data-i18n="navHome">خانه</a>
+        <a href="#skills" data-i18n="navSkills">مهارت‌ها</a>
+        <a href="#experience" data-i18n="navExp">سوابق</a>
+        <a href="#portfolio" data-i18n="navWork">نمونه‌کار</a>
+        <a href="#contact" data-i18n="navContact">تماس</a>
+        <a href="downloads.html" data-i18n="navDownload">دانلود فایل</a>
+      </nav>
+      <div class="header-actions">
+        <button class="btn-lang" id="langBtn" type="button">EN</button>
+        <div class="color-picker-wrap">
+          <button class="btn-icon" id="colorBtn" type="button" aria-label="Color theme" title="رنگ تم">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22c5.5 0 10-4.5 10-10S17.5 2 12 2 2 6.5 2 12s4.5 10 10 10z"/><path d="M12 2a10 10 0 010 20"/><circle cx="12" cy="12" r="3" fill="currentColor" stroke="none"/></svg>
+          </button>
+          <div class="color-panel" id="colorPanel">
+            <button type="button" class="color-swatch active" data-theme="rose" style="background:#E8A0BF" title="رز"></button>
+            <button type="button" class="color-swatch" data-theme="mint" style="background:#A8D5C8" title="نعنایی"></button>
+            <button type="button" class="color-swatch" data-theme="lavender" style="background:#C4B5E0" title="اسطوخودوس"></button>
+            <button type="button" class="color-swatch" data-theme="sky" style="background:#A8C5E2" title="آسمانی"></button>
+            <button type="button" class="color-swatch" data-theme="peach" style="background:#F5D0A9" title="هلویی"></button>
+            <button type="button" class="color-swatch" data-theme="coral" style="background:#F0A89A" title="مرجانی"></button>
+          </div>
+        </div>
+        <button class="btn-icon" id="themeBtn" type="button" aria-label="Theme">
+          <svg class="icon" id="iconSun" style="display:none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+          <svg class="icon" id="iconMoon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+        </button>
+        <a href="downloads.html" class="btn-download-header" data-i18n="navDownload">دانلود فایل</a>
+        <a href="#contact" class="btn-primary" data-i18n="navCta">تماس بگیرید</a>
+        <button class="btn-icon btn-menu" id="menuBtn" type="button" aria-label="Menu">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="container mobile-menu" id="mobileMenu">
+      <a href="#home" data-i18n="navHome">خانه</a>
+      <a href="#skills" data-i18n="navSkills">مهارت‌ها</a>
+      <a href="#experience" data-i18n="navExp">سوابق</a>
+      <a href="#portfolio" data-i18n="navWork">نمونه‌کار</a>
+      <a href="#contact" data-i18n="navContact">تماس</a>
+      <a href="downloads.html" data-i18n="navDownload">دانلود فایل</a>
+      <a href="#contact" class="btn-primary" data-i18n="navCta">تماس بگیرید</a>
+    </div>
+  </header>
+
+  <section class="hero section" id="home">
+    <div class="container hero-grid">
+      <div>
+        <div class="badge"><span class="badge-dot"></span> <span data-i18n="badge">آماده همکاری</span></div>
+        <p class="hero-greeting" data-i18n="greeting">سلام! من</p>
+        <h1 data-i18n="heroName">اهریوان</h1>
+        <p class="hero-desc" data-i18n="heroDesc">مهندس هوش مصنوعی، توسعه‌دهنده پایتون و طراح وب و گرافیک. ساخت وب‌سایت، هویت برند و ربات‌های اتوماسیون برای مشتریان بین‌المللی — از لوگو تا لندینگ تا محصول نهایی.</p>
+        <div class="hero-meta">
+          <span>
+            <svg class="icon" style="width:16px;height:16px" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <span data-i18n="location">سمنان، سرخه</span>
+          </span>
+          <span>
+            <svg class="icon" style="width:16px;height:16px" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+            <span data-i18n="years">طراحی سایت · گرافیک · پایتون</span>
+          </span>
+        </div>
+        <div class="hero-btns">
+          <a href="#portfolio" class="btn btn-dark" data-i18n="btnWork">مشاهده کارها</a>
+          <a href="#contact" class="btn btn-outline" data-i18n="btnStart">شروع پروژه</a>
+          <a class="btn btn-resume" id="resumeDownload" href="resume.html">
+            <span data-i18n="resumeBtn">مشاهده رزومه</span>
+          </a>
+        </div>
+        <div class="hero-stats">
+          <div><strong>۵۰+</strong><span data-i18n="statProjects">پروژه</span></div>
+          <div><strong>۴</strong><span data-i18n="statFields">حوزه تخصصی</span></div>
+          <div><strong>۱۰۰٪</strong><span data-i18n="statSat">تعهد به کیفیت</span></div>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <div class="orbit-stage">
+          <div class="orbit-ring orbit-ring-1"></div>
+          <div class="orbit-ring orbit-ring-2"></div>
+          <div class="orbit-glow"></div>
+          <div class="avatar-large">
+            <img src="profile.jpg" alt="اهریوان"
+                 onerror="this.style.display='none'; this.parentElement.classList.add('no-img');" />
+            <div class="avatar-fallback">اه</div>
+          </div>
+          <!-- floating chips -->
+          <span class="float-chip chip-1">Python</span>
+          <span class="float-chip chip-2">HTML</span>
+          <span class="float-chip chip-3">CSS</span>
+          <span class="float-chip chip-4">UI/UX</span>
+          <span class="float-chip chip-5">Logo</span>
+          <span class="float-chip chip-6">JS</span>
+        </div>
+        <div class="hero-visual-meta">
+          <strong data-i18n="profileName">اهریوان</strong>
+          <span data-i18n="profileRole">طراحی سایت · گرافیک · پایتون</span>
+          <span class="loc" data-i18n="profileLoc">سمنان، سرخه</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt" id="skills">
+    <div class="container">
+      <div class="section-title">
+        <p class="label" data-i18n="skillsLabel">مهارت‌ها</p>
+        <h2 data-i18n="skillsTitle">تخصص‌ها و ابزارها</h2>
+      </div>
+      <div class="skills-grid">
+        <div class="skill-card"><div class="skill-card-head"><strong data-i18n="sk1">طراحی سایت</strong><span class="skill-level">Expert</span></div><div class="skill-bar"><div class="skill-fill" style="width:95%"></div></div></div>
+        <div class="skill-card"><div class="skill-card-head"><strong data-i18n="sk2">گرافیک</strong><span class="skill-level">Expert</span></div><div class="skill-bar"><div class="skill-fill" style="width:92%"></div></div></div>
+        <div class="skill-card"><div class="skill-card-head"><strong data-i18n="sk3">HTML / CSS / JS</strong><span class="skill-level">Expert</span></div><div class="skill-bar"><div class="skill-fill" style="width:90%"></div></div></div>
+        <div class="skill-card"><div class="skill-card-head"><strong data-i18n="sk4">پایتون</strong><span class="skill-level">Advanced</span></div><div class="skill-bar"><div class="skill-fill" style="width:85%"></div></div></div>
+        <div class="skill-card"><div class="skill-card-head"><strong data-i18n="sk5">کامپیوتر و شبکه</strong><span class="skill-level">Advanced</span></div><div class="skill-bar"><div class="skill-fill" style="width:88%"></div></div></div>
+        <div class="skill-card"><div class="skill-card-head"><strong data-i18n="sk6">UI / UX</strong><span class="skill-level">Advanced</span></div><div class="skill-bar"><div class="skill-fill" style="width:87%"></div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="experience">
+    <div class="container">
+      <div class="section-title">
+        <p class="label" data-i18n="expLabel">سوابق و مدارک</p>
+        <h2 data-i18n="expTitle">مسیر حرفه‌ای و تحصیلی</h2>
+      </div>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-dot active"></div>
+          <div class="timeline-card">
+            <div class="timeline-card-head">
+              <h3 data-i18n="exp1Title">طراحی سایت و فرانت‌اند</h3>
+              <span class="timeline-date" data-i18n="exp1Date">فعال</span>
+            </div>
+            <p class="timeline-company" data-i18n="exp1Co">طراحی و پیاده‌سازی وب‌سایت</p>
+            <p data-i18n="exp1Desc">طراحی و کدنویسی سایت‌های شخصی، فروشگاهی و شرکتی با تمرکز روی ظاهر تمیز، سرعت و تجربه کاربری. از ایده تا تحویل نهایی.</p>
+            <div class="tags"><span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">JavaScript</span><span class="tag">UI Design</span></div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-card">
+            <div class="timeline-card-head">
+              <h3 data-i18n="exp2Title">گرافیک و هویت بصری</h3>
+              <span class="timeline-date" data-i18n="exp2Date">فعال</span>
+            </div>
+            <p class="timeline-company" data-i18n="exp2Co">طراحی گرافیک و برندینگ</p>
+            <p data-i18n="exp2Desc">طراحی لوگو، بنر، شبکه‌های اجتماعی و هویت بصری برند. ترکیب اصول گرافیک با نیازهای دیجیتال و وب.</p>
+            <div class="tags"><span class="tag">Logo</span><span class="tag">Branding</span><span class="tag">Social Media</span><span class="tag">Photoshop</span></div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-card">
+            <div class="timeline-card-head">
+              <h3 data-i18n="exp3Title">برنامه‌نویسی پایتون</h3>
+              <span class="timeline-date" data-i18n="exp3Date">فعال</span>
+            </div>
+            <p class="timeline-company" data-i18n="exp3Co">اسکریپت، اتوماسیون و بک‌اند سبک</p>
+            <p data-i18n="exp3Desc">نوشتن اسکریپت‌های پایتون، اتوماسیون کارها، کار با داده و توسعه بخش‌های منطقی پروژه‌های وب و ابزارهای کوچک.</p>
+            <div class="tags"><span class="tag">Python</span><span class="tag">Scripting</span><span class="tag">Automation</span></div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-card">
+            <div class="timeline-card-head">
+              <h3 data-i18n="exp4Title">مدارک تخصصی</h3>
+              <span class="timeline-date" data-i18n="exp4Date">مدرک</span>
+            </div>
+            <p class="timeline-company" data-i18n="exp4Co">طراحی سایت · گرافیک · کامپیوتر · پایتون</p>
+            <p data-i18n="exp4Desc">دارای مدارک رسمی در چهار حوزه: طراحی وب‌سایت، طراحی گرافیک، مبانی و مهارت‌های کامپیوتر، و برنامه‌نویسی پایتون.</p>
+            <div class="tags"><span class="tag">Web Design</span><span class="tag">Graphics</span><span class="tag">Computer</span><span class="tag">Python</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt" id="portfolio">
+    <div class="container">
+      <div class="section-title">
+        <p class="label" data-i18n="workLabel">نمونه‌کار</p>
+        <h2 data-i18n="workTitle">پروژه‌های منتخب</h2>
+        <p data-i18n="workSub">طراحی سایت، لوگو و کارهای گرافیکی</p>
+      </div>
+      <div class="portfolio-stats">
+        <div class="stat-item"><strong>۱۸</strong><span data-i18n="stWeb">طراحی سایت</span></div>
+        <div class="stat-item"><strong>۱۲</strong><span data-i18n="stLogo">طراحی لوگو</span></div>
+        <div class="stat-item"><strong>۸</strong><span data-i18n="stBrand">برندینگ</span></div>
+        <div class="stat-item"><strong>۵۰+</strong><span data-i18n="stAll">کل پروژه‌ها</span></div>
+      </div>
+      <div class="filters">
+        <button class="filter-btn active" data-filter="all" type="button" data-i18n="fAll">همه</button>
+        <button class="filter-btn" data-filter="web" type="button" data-i18n="fWeb">طراحی سایت</button>
+        <button class="filter-btn" data-filter="logo" type="button" data-i18n="fLogo">طراحی لوگو</button>
+        <button class="filter-btn" data-filter="brand" type="button" data-i18n="fBrand">برندینگ</button>
+      </div>
+      <div class="portfolio-grid" id="portfolioGrid">
+        <article class="portfolio-item" data-category="web">
+          <div class="portfolio-thumb">
+            <img src="works/work-1.jpg" alt="سایت شرکتی مدرن" loading="lazy" />
+          </div>
+          <div class="portfolio-info"><div><h3 data-i18n="p1">سایت شرکتی مدرن</h3><p data-i18n="p1c">طراحی سایت</p></div><span class="portfolio-year">۱۴۰۴</span></div>
+        </article>
+        <article class="portfolio-item" data-category="logo">
+          <div class="portfolio-thumb">
+            <img src="works/work-2.jpg" alt="لوگو برند شخصی" loading="lazy" />
+          </div>
+          <div class="portfolio-info"><div><h3 data-i18n="p2">لوگو برند شخصی</h3><p data-i18n="p2c">طراحی لوگو</p></div><span class="portfolio-year">۱۴۰۳</span></div>
+        </article>
+        <article class="portfolio-item" data-category="brand">
+          <div class="portfolio-thumb">
+            <img src="works/work-3.jpg" alt="هویت بصری کافه" loading="lazy" />
+          </div>
+          <div class="portfolio-info"><div><h3 data-i18n="p3">هویت بصری کافه</h3><p data-i18n="p3c">برندینگ</p></div><span class="portfolio-year">۱۴۰۴</span></div>
+        </article>
+        <article class="portfolio-item" data-category="web">
+          <div class="portfolio-thumb">
+            <img src="works/work-4.jpg" alt="فروشگاه آنلاین" loading="lazy" />
+          </div>
+          <div class="portfolio-info"><div><h3 data-i18n="p4">فروشگاه آنلاین</h3><p data-i18n="p4c">طراحی سایت</p></div><span class="portfolio-year">۱۴۰۳</span></div>
+        </article>
+        <article class="portfolio-item" data-category="logo">
+          <div class="portfolio-thumb">
+            <img src="works/work-5.jpg" alt="لوگو استودیو" loading="lazy" />
+          </div>
+          <div class="portfolio-info"><div><h3 data-i18n="p5">لوگو استودیو</h3><p data-i18n="p5c">طراحی لوگو</p></div><span class="portfolio-year">۱۴۰۲</span></div>
+        </article>
+        <article class="portfolio-item" data-category="web">
+          <div class="portfolio-thumb">
+            <img src="works/work-6.jpg" alt="لندینگ معرفی محصول" loading="lazy" />
+          </div>
+          <div class="portfolio-info"><div><h3 data-i18n="p6">لندینگ معرفی محصول</h3><p data-i18n="p6c">طراحی سایت</p></div><span class="portfolio-year">۱۴۰۴</span></div>
+        </article>
+      </div></div>
+    </div>
+  </section>
+
+  <section class="section" id="services">
+    <div class="container">
+      <div class="section-title">
+        <p class="label" data-i18n="svcLabel">خدمات</p>
+        <h2 data-i18n="svcTitle">چه کاری انجام می‌دهم</h2>
+      </div>
+      <div class="services-grid">
+        <div class="service-card">
+          <div class="service-icon"><svg class="icon" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>
+          <h3 data-i18n="svc1t">طراحی سایت</h3>
+          <p data-i18n="svc1d">طراحی و پیاده‌سازی وب‌سایت شخصی، شرکتی و فروشگاهی با ظاهر مدرن و سرعت بالا.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+          <h3 data-i18n="svc2t">طراحی لوگو و گرافیک</h3>
+          <p data-i18n="svc2d">طراحی لوگو، بنر، پست شبکه‌های اجتماعی و هویت بصری برند.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></svg></div>
+          <h3 data-i18n="svc3t">فرانت‌اند</h3>
+          <p data-i18n="svc3d">کدنویسی HTML، CSS و JavaScript برای تبدیل طرح به صفحه واقعی و واکنش‌گرا.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+          <h3 data-i18n="svc4t">پایتون و اتوماسیون</h3>
+          <p data-i18n="svc4d">اسکریپت‌نویسی پایتون، اتوماسیون کارها و ابزارهای کمکی برای پروژه‌ها.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon"><svg class="icon" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg></div>
+          <h3 data-i18n="svc5t">UI / UX</h3>
+          <p data-i18n="svc5d">طراحی رابط کاربری تمیز و تجربه کاربری روان برای وب و موبایل.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M9 18h6M10 22h4M12 2a7 7 0 017 7c0 2.38-1.19 4.47-3 5.74V17H8v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 017-7z"/></svg></div>
+          <h3 data-i18n="svc6t">مشاوره و پشتیبانی</h3>
+          <p data-i18n="svc6d">راهنمایی در انتخاب تکنولوژی، بهبود سایت موجود و پشتیبانی فنی.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt contact" id="contact">
+    <div class="container">
+      <p class="label contact-label" data-i18n="contactLabel">تماس</p>
+      <h2 style="font-size:clamp(1.75rem,4vw,2.5rem);font-weight:700;margin-bottom:1rem" data-i18n="contactTitle">بیایید با هم کار کنیم</h2>
+      <p class="contact-desc" data-i18n="contactDesc">برای طراحی سایت، لوگو، گرافیک یا پروژه پایتون در ارتباط باشید.</p>
+      <a href="mailto:ahr1vanx@gmail.com" class="contact-email">
+        ahr1vanx@gmail.com
+        <svg class="icon" style="width:20px;height:20px" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><path d="M22 6l-10 7L2 6"/></svg>
+      </a>
+      <div class="socials">
+        <a href="https://instagram.com/AhR1VaNx" class="social" aria-label="Instagram" target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 3.25.15 4.77 1.69 4.92 4.92.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.15 3.23-1.66 4.77-4.92 4.92-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-3.26-.15-4.77-1.7-4.92-4.92-.06-1.27-.07-1.65-.07-4.85s.01-3.58.07-4.85C2.38 3.92 3.9 2.38 7.15 2.23 8.42 2.17 8.8 2.16 12 2.16zM12 0C8.74 0 8.33.01 7.05.07 2.7.27.27 2.69.07 7.05.01 8.33 0 8.74 0 12s.01 3.67.07 4.95c.2 4.36 2.62 6.78 6.98 6.98C8.33 23.99 8.74 24 12 24s3.67-.01 4.95-.07c4.35-.2 6.78-2.62 6.98-6.98.06-1.28.07-1.69.07-4.95s-.01-3.67-.07-4.95C23.73 2.7 21.31.27 16.95.07 15.67.01 15.26 0 12 0zm0 5.84A6.16 6.16 0 105.84 12 6.16 6.16 0 0012 5.84zM12 16a4 4 0 110-8 4 4 0 010 8zm6.41-11.85a1.44 1.44 0 11-2.88 0 1.44 1.44 0 012.88 0z"/></svg>
+        </a>
+        <a href="https://github.com/ahurivan" class="social" aria-label="GitHub" target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.23c-3.34.73-4.03-1.42-4.03-1.42-.55-1.39-1.33-1.76-1.33-1.76-1.09-.74.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.83 2.81 1.3 3.49 1 .11-.78.42-1.31.76-1.61-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23.96-.27 1.98-.4 3-.4s2.04.13 3 .4c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.62-5.48 5.92.43.37.82 1.1.82 2.22v3.29c0 .32.22.69.83.57C20.56 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+        </a>
+        <a href="https://t.me/AhR1VaNx" class="social" aria-label="Telegram" target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M12 0C5.37 0 0 5.37 0 12s5.37 12 12 12 12-5.37 12-12S18.63 0 12 0zm5.56 8.19l-1.88 8.86c-.14.63-.51.78-1.03.49l-2.85-2.1-1.37 1.32c-.15.15-.28.28-.57.28l.2-2.9 5.28-4.77c.23-.2-.05-.31-.35-.12l-6.53 4.11-2.81-.88c-.61-.19-.62-.61.13-.9l10.98-4.23c.51-.19.96.12.8.89z"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-status">
+        <span><span class="status-dot"></span><span data-i18n="available">آماده به کار</span></span>
+        <span class="clock" id="liveClock"></span>
+      </div>
+      <div data-i18n="copyright">© ۱۴۰۵ اهریوان. تمامی حقوق محفوظ است.</div>
+    </div>
+  </footer>
+
+  <script>
+  (function () {
+    'use strict';
+
+    /* ========== i18n ========== */
+    var dict = {
+      fa: {
+        pageTitle: 'اهریوان | طراح سایت، گرافیک و پایتون',
+        navHome: 'خانه', navSkills: 'مهارت‌ها', navExp: 'سوابق', navWork: 'نمونه‌کار', navContact: 'تماس', navDownload: 'دانلود فایل', navCta: 'تماس بگیرید',
+        badge: 'آماده همکاری', greeting: 'سلام! من', lastName: 'طراح',
+        heroDesc: 'مهندس هوش مصنوعی، توسعه‌دهنده پایتون و طراح وب و گرافیک. ساخت وب‌سایت، هویت برند و ربات‌های اتوماسیون برای مشتریان بین‌المللی — از لوگو تا لندینگ تا محصول نهایی.',
+        location: 'سمنان، سرخه', years: 'AI · Python · Web & Graphic', heroName: 'اهریوان',
+        btnWork: 'مشاهده کارها', btnStart: 'شروع پروژه',
+        statProjects: 'پروژه', statFields: 'حوزه تخصصی', statSat: 'تعهد به کیفیت',
+        profileName: 'اهریوان', profileRole: 'AI · Python · Web & Graphic Design', profileLoc: 'سمنان، سرخه',
+        resumeBtn: 'مشاهده رزومه', resumeHint: 'فایل PDF را کنار این صفحه بگذارید',
+        skillsLabel: 'مهارت‌ها', skillsTitle: 'تخصص‌ها و ابزارها',
+        sk1: 'طراحی سایت', sk2: 'گرافیک', sk3: 'HTML / CSS / JS', sk4: 'پایتون', sk5: 'کامپیوتر و شبکه', sk6: 'UI / UX',
+        expLabel: 'سوابق و مدارک', expTitle: 'مسیر حرفه‌ای و تحصیلی',
+        exp1Title: 'طراحی سایت و فرانت‌اند', exp1Date: 'فعال', exp1Co: 'طراحی و پیاده‌سازی وب‌سایت',
+        exp1Desc: 'طراحی و کدنویسی سایت‌های شخصی، فروشگاهی و شرکتی با تمرکز روی ظاهر تمیز، سرعت و تجربه کاربری. از ایده تا تحویل نهایی.',
+        exp2Title: 'گرافیک و هویت بصری', exp2Date: 'فعال', exp2Co: 'طراحی گرافیک و برندینگ',
+        exp2Desc: 'طراحی لوگو، بنر، شبکه‌های اجتماعی و هویت بصری برند. ترکیب اصول گرافیک با نیازهای دیجیتال و وب.',
+        exp3Title: 'برنامه‌نویسی پایتون', exp3Date: 'فعال', exp3Co: 'اسکریپت، اتوماسیون و بک‌اند سبک',
+        exp3Desc: 'نوشتن اسکریپت‌های پایتون، اتوماسیون کارها، کار با داده و توسعه بخش‌های منطقی پروژه‌های وب و ابزارهای کوچک.',
+        exp4Title: 'مدارک تخصصی', exp4Date: 'مدرک', exp4Co: 'طراحی سایت · گرافیک · کامپیوتر · پایتون',
+        exp4Desc: 'دارای مدارک رسمی در چهار حوزه: طراحی وب‌سایت، طراحی گرافیک، مبانی و مهارت‌های کامپیوتر، و برنامه‌نویسی پایتون.',
+        workLabel: 'نمونه‌کار', workTitle: 'پروژه‌های منتخب', workSub: 'طراحی سایت، لوگو و کارهای گرافیکی',
+        stWeb: 'طراحی سایت', stLogo: 'طراحی لوگو', stBrand: 'برندینگ', stAll: 'کل پروژه‌ها',
+        fAll: 'همه', fWeb: 'طراحی سایت', fLogo: 'طراحی لوگو', fBrand: 'برندینگ',
+        p1: 'سایت شرکتی مدرن', p1c: 'طراحی سایت', p2: 'لوگو برند شخصی', p2c: 'طراحی لوگو',
+        p3: 'هویت بصری کافه', p3c: 'برندینگ', p4: 'فروشگاه آنلاین', p4c: 'طراحی سایت',
+        p5: 'لوگو استودیو', p5c: 'طراحی لوگو', p6: 'لندینگ معرفی محصول', p6c: 'طراحی سایت',
+        svcLabel: 'خدمات', svcTitle: 'چه کاری انجام می‌دهم',
+        svc1t: 'طراحی سایت', svc1d: 'طراحی و پیاده‌سازی وب‌سایت شخصی، شرکتی و فروشگاهی با ظاهر مدرن و سرعت بالا.',
+        svc2t: 'طراحی لوگو و گرافیک', svc2d: 'طراحی لوگو، بنر، پست شبکه‌های اجتماعی و هویت بصری برند.',
+        svc3t: 'فرانت‌اند', svc3d: 'کدنویسی HTML، CSS و JavaScript برای تبدیل طرح به صفحه واقعی و واکنش‌گرا.',
+        svc4t: 'پایتون و اتوماسیون', svc4d: 'اسکریپت‌نویسی پایتون، اتوماسیون کارها و ابزارهای کمکی برای پروژه‌ها.',
+        svc5t: 'UI / UX', svc5d: 'طراحی رابط کاربری تمیز و تجربه کاربری روان برای وب و موبایل.',
+        svc6t: 'مشاوره و پشتیبانی', svc6d: 'راهنمایی در انتخاب تکنولوژی، بهبود سایت موجود و پشتیبانی فنی.',
+        contactLabel: 'تماس', contactTitle: 'بیایید با هم کار کنیم',
+        contactDesc: 'برای طراحی سایت، لوگو، گرافیک یا پروژه پایتون در ارتباط باشید.',
+        available: 'آماده به کار', copyright: '© ۱۴۰۵ اهریوان. تمامی حقوق محفوظ است.'
+      },
+      en: {
+        pageTitle: 'Ahriwan | Web Design, Graphics & Python',
+        navHome: 'Home', navSkills: 'Skills', navExp: 'Experience', navWork: 'Work', navContact: 'Contact', navDownload: 'Downloads', navCta: 'Get in touch',
+        badge: 'Available for work', greeting: 'Hi, I am', lastName: 'Designer',
+        heroDesc: 'AI engineer, Python developer and web & graphic designer. Building websites, brand identities and automation bots for international clients — from logo to landing page to a working product.',
+        location: 'Semnan, Sorkheh', years: 'AI · Python · Web & Graphic', heroName: '𝐀𝐡𝐫𝐢𝐯𝐚𝐧',
+        btnWork: 'View work', btnStart: 'Start a project',
+        statProjects: 'Projects', statFields: 'Specialties', statSat: 'Quality focus',
+        profileName: '𝐀𝐡𝐫𝐢𝐯𝐚𝐧', profileRole: 'AI Engineer · Python · Web & Graphic', profileLoc: 'Semnan, Sorkheh',
+        resumeBtn: 'View resume', resumeHint: 'Place your PDF next to this page',
+        skillsLabel: 'Skills', skillsTitle: 'Expertise & tools',
+        sk1: 'Web Design', sk2: 'Graphics', sk3: 'HTML / CSS / JS', sk4: 'Python', sk5: 'Computer & Network', sk6: 'UI / UX',
+        expLabel: 'Background', expTitle: 'Experience & credentials',
+        exp1Title: 'Web design & frontend', exp1Date: 'Active', exp1Co: 'Website design & build',
+        exp1Desc: 'Designing and coding personal, e-commerce and business websites focused on clean UI, speed and user experience — from idea to delivery.',
+        exp2Title: 'Graphics & visual identity', exp2Date: 'Active', exp2Co: 'Graphic design & branding',
+        exp2Desc: 'Logo design, banners, social media assets and brand identity. Combining graphic principles with digital and web needs.',
+        exp3Title: 'Python programming', exp3Date: 'Active', exp3Co: 'Scripting, automation & light backend',
+        exp3Desc: 'Python scripts, task automation, data work and logic for web projects and small tools.',
+        exp4Title: 'Professional certificates', exp4Date: 'Certified', exp4Co: 'Web design · Graphics · Computer · Python',
+        exp4Desc: 'Official certificates in four areas: website design, graphic design, computer fundamentals, and Python programming.',
+        workLabel: 'Portfolio', workTitle: 'Selected projects', workSub: 'Websites, logos and graphic work',
+        stWeb: 'Websites', stLogo: 'Logos', stBrand: 'Branding', stAll: 'Total projects',
+        fAll: 'All', fWeb: 'Websites', fLogo: 'Logos', fBrand: 'Branding',
+        p1: 'Modern company site', p1c: 'Web design', p2: 'Personal brand logo', p2c: 'Logo design',
+        p3: 'Cafe visual identity', p3c: 'Branding', p4: 'Online store', p4c: 'Web design',
+        p5: 'Studio logo', p5c: 'Logo design', p6: 'Product landing page', p6c: 'Web design',
+        svcLabel: 'Services', svcTitle: 'What I do',
+        svc1t: 'Web design', svc1d: 'Design and build personal, business and e-commerce sites with a modern look and high performance.',
+        svc2t: 'Logo & graphics', svc2d: 'Logo design, banners, social posts and brand visual identity.',
+        svc3t: 'Frontend', svc3d: 'HTML, CSS and JavaScript to turn designs into real responsive pages.',
+        svc4t: 'Python & automation', svc4d: 'Python scripting, automation and helper tools for projects.',
+        svc5t: 'UI / UX', svc5d: 'Clean interface design and smooth user experience for web and mobile.',
+        svc6t: 'Consulting & support', svc6d: 'Guidance on tech choices, improving existing sites and technical support.',
+        contactLabel: 'Contact', contactTitle: "Let's work together",
+        contactDesc: 'Reach out for web design, logos, graphics or Python projects.',
+        available: 'Available for work', copyright: '© 1405 𝐀𝐡𝐫𝐢𝐯𝐚𝐧. All rights reserved.'
+      }
+    };
+
+    var lang = localStorage.getItem('lang') || 'fa';
+    var langBtn = document.getElementById('langBtn');
+
+    function applyLang(l) {
+      lang = l;
+      localStorage.setItem('lang', l);
+      var d = dict[l];
+      document.documentElement.lang = l;
+      document.documentElement.dir = l === 'fa' ? 'rtl' : 'ltr';
+      langBtn.textContent = l === 'fa' ? 'EN' : 'FA';
+
+      var nodes = document.querySelectorAll('[data-i18n]');
+      for (var i = 0; i < nodes.length; i++) {
+        var key = nodes[i].getAttribute('data-i18n');
+        if (d[key] !== undefined) {
+          if (nodes[i].tagName === 'TITLE') document.title = d[key];
+          else nodes[i].textContent = d[key];
+        }
+      }
+      var titleEl = document.querySelector('title');
+      if (titleEl && d.pageTitle) titleEl.textContent = d.pageTitle;
+    }
+
+    applyLang(lang);
+    langBtn.addEventListener('click', function () {
+      applyLang(lang === 'fa' ? 'en' : 'fa');
+    });
+
+
+    /* ========== Color theme picker ========== */
+    var body = document.body;
+    var colorBtn = document.getElementById('colorBtn');
+    var colorPanel = document.getElementById('colorPanel');
+    var swatches = document.querySelectorAll('.color-swatch');
+
+    function applyColor(name) {
+      body.setAttribute('data-color', name);
+      localStorage.setItem('colorTheme', name);
+      for (var s = 0; s < swatches.length; s++) {
+        if (swatches[s].getAttribute('data-theme') === name) swatches[s].classList.add('active');
+        else swatches[s].classList.remove('active');
+      }
+    }
+
+    var savedColor = localStorage.getItem('colorTheme') || 'rose';
+    applyColor(savedColor);
+
+    if (colorBtn && colorPanel) {
+      colorBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        colorPanel.classList.toggle('open');
+      });
+      for (var s = 0; s < swatches.length; s++) {
+        swatches[s].addEventListener('click', function (e) {
+          e.stopPropagation();
+          applyColor(this.getAttribute('data-theme'));
+          colorPanel.classList.remove('open');
+        });
+      }
+      document.addEventListener('click', function () {
+        colorPanel.classList.remove('open');
+      });
+    }
+
+    /* ========== Theme with effect ========== */
+
+    var themeBtn = document.getElementById('themeBtn');
+    var iconSun = document.getElementById('iconSun');
+    var iconMoon = document.getElementById('iconMoon');
+    var flash = document.getElementById('themeFlash');
+
+    function applyTheme(dark, fromEvent) {
+      if (fromEvent && flash) {
+        var x = 50, y = 50;
+        if (fromEvent.clientX) {
+          x = (fromEvent.clientX / window.innerWidth) * 100;
+          y = (fromEvent.clientY / window.innerHeight) * 100;
+        }
+        flash.style.setProperty('--tx', x + '%');
+        flash.style.setProperty('--ty', y + '%');
+        flash.classList.add('active');
+        setTimeout(function () { flash.classList.remove('active'); }, 400);
+      }
+      themeBtn.classList.add('spin');
+      setTimeout(function () { themeBtn.classList.remove('spin'); }, 300);
+
+      if (dark) {
+        body.classList.add('dark');
+        iconSun.style.display = 'block';
+        iconMoon.style.display = 'none';
+      } else {
+        body.classList.remove('dark');
+        iconSun.style.display = 'none';
+        iconMoon.style.display = 'block';
+      }
+    }
+
+    function isNightHours() {
+      var h = new Date().getHours();
+      // شب: از ۱۹ تا ۶ صبح
+      return h >= 19 || h < 6;
+    }
+
+    var savedTheme = localStorage.getItem('theme');
+    // اگر کاربر دستی انتخاب نکرده باشد، بر اساس ساعت روز/شب
+    if (savedTheme === 'dark' || savedTheme === 'light') {
+      applyTheme(savedTheme === 'dark', null);
+    } else {
+      applyTheme(isNightHours(), null);
+    }
+
+    themeBtn.addEventListener('click', function (e) {
+      var goingDark = !body.classList.contains('dark');
+      applyTheme(goingDark, e);
+      // انتخاب دستی ذخیره می‌شود
+      localStorage.setItem('theme', goingDark ? 'dark' : 'light');
+    });
+
+    // هر ۳۰ دقیقه اگر کاربر تم دستی نزده، با ساعت هماهنگ کن
+    // (اگر theme در localStorage نباشد)
+    setInterval(function () {
+      if (!localStorage.getItem('theme')) {
+        applyTheme(isNightHours(), null);
+      }
+    }, 30 * 60 * 1000);
+
+    /* ========== Cursor ========== */
+    var dot = document.getElementById('cursorDot');
+    var outline = document.getElementById('cursorOutline');
+    var mx = 0, my = 0, ox = 0, oy = 0;
+    if (window.matchMedia('(min-width: 769px)').matches) {
+      body.classList.add('custom-cursor');
+      dot.style.display = 'block';
+      outline.style.display = 'block';
+      document.addEventListener('mousemove', function (e) {
+        mx = e.clientX; my = e.clientY;
+        dot.style.left = mx + 'px'; dot.style.top = my + 'px';
+      });
+      (function anim() {
+        ox += (mx - ox) * 0.15; oy += (my - oy) * 0.15;
+        outline.style.left = ox + 'px'; outline.style.top = oy + 'px';
+        requestAnimationFrame(anim);
+      })();
+      var hoverables = document.querySelectorAll('a, button, .portfolio-item, .filter-btn, label');
+      for (var i = 0; i < hoverables.length; i++) {
+        hoverables[i].addEventListener('mouseenter', function () { dot.classList.add('hover'); outline.classList.add('hover'); });
+        hoverables[i].addEventListener('mouseleave', function () { dot.classList.remove('hover'); outline.classList.remove('hover'); });
+      }
+    }
+
+    /* ========== Header ========== */
+    var header = document.getElementById('header');
+    window.addEventListener('scroll', function () {
+      if (window.scrollY > 16) header.classList.add('scrolled');
+      else header.classList.remove('scrolled');
+    });
+
+    var menuBtn = document.getElementById('menuBtn');
+    var mobileMenu = document.getElementById('mobileMenu');
+    menuBtn.addEventListener('click', function () {
+      var open = mobileMenu.classList.toggle('open');
+      menuBtn.classList.toggle('is-open', open);
+    });
+    var mobileLinks = mobileMenu.querySelectorAll('a');
+    for (var j = 0; j < mobileLinks.length; j++) {
+      mobileLinks[j].addEventListener('click', function () {
+        mobileMenu.classList.remove('open');
+        menuBtn.classList.remove('is-open');
+      });
+    }
+
+    /* ========== Filter ========== */
+    var filterBtns = document.querySelectorAll('.filter-btn');
+    var items = document.querySelectorAll('.portfolio-item');
+    for (var k = 0; k < filterBtns.length; k++) {
+      filterBtns[k].addEventListener('click', function () {
+        for (var a = 0; a < filterBtns.length; a++) filterBtns[a].classList.remove('active');
+        this.classList.add('active');
+        var f = this.getAttribute('data-filter');
+        for (var b = 0; b < items.length; b++) {
+          var cat = items[b].getAttribute('data-category');
+          items[b].style.display = (f === 'all' || cat === f) ? '' : 'none';
+        }
+      });
+    }
+
+    /* ========== Clock ========== */
+    function updateClock() {
+      try {
+        var opts = { timeZone: 'Asia/Tehran', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
+        var label = lang === 'fa' ? ' سمنان' : ' Semnan';
+        document.getElementById('liveClock').textContent = new Date().toLocaleTimeString(lang === 'fa' ? 'fa-IR' : 'en-GB', opts) + label;
+      } catch (e) {
+        document.getElementById('liveClock').textContent = new Date().toLocaleTimeString();
+      }
+    }
+    updateClock();
+    setInterval(updateClock, 1000);
+
+    /* ========== Smooth scroll ========== */
+    var anchors = document.querySelectorAll('a[href^="#"]');
+    for (var n = 0; n < anchors.length; n++) {
+      anchors[n].addEventListener('click', function (e) {
+        var href = this.getAttribute('href');
+        if (!href || href === '#') return;
+        var target = document.querySelector(href);
+        if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+      });
+    }
+
+
+    /* resume links to resume.html */
+  })();
+  </script>
+</body>
+</html>

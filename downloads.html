@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>دانلود فایل‌ها | اهریوان</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Vazirmatn', system-ui, sans-serif;
+      background: #FAFAF9; color: #1C1917; line-height: 1.7; min-height: 100vh;
+      transition: background-color 0.45s ease, color 0.45s ease;
+    }
+    body.dark { background: #0C0A09; color: #FAFAF9; }
+    a { color: inherit; text-decoration: none; }
+    button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+    :root { --c: #D4849A; --c-rgb: 212, 132, 154; }
+    .theme-flash {
+      position: fixed; inset: 0; z-index: 99999; pointer-events: none; opacity: 0;
+      background: radial-gradient(circle at var(--tx, 50%) var(--ty, 50%), rgba(var(--c-rgb), 0.35), transparent 55%);
+      transition: opacity 0.35s ease;
+    }
+    .theme-flash.active { opacity: 1; }
+    .topbar {
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(250,250,249,0.92); backdrop-filter: blur(12px);
+      border-bottom: 1px solid #E7E5E4;
+      padding: 0.85rem 1.25rem;
+      display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+    }
+    body.dark .topbar { background: rgba(12,10,9,0.92); border-bottom-color: #292524; }
+    .topbar a.back { font-size: 0.9rem; font-weight: 500; color: #78716C; }
+    body.dark .topbar a.back { color: #A8A29E; }
+    .topbar a.back:hover { color: var(--c); }
+    .topbar-actions { display: flex; gap: 0.5rem; align-items: center; }
+    .btn-lang {
+      font-size: 0.75rem; font-weight: 600; padding: 0.3rem 0.65rem;
+      border-radius: 999px; border: 1px solid #D6D3D1;
+    }
+    body.dark .btn-lang { border-color: #44403C; }
+    .btn-theme {
+      width: 36px; height: 36px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      border: 1px solid #E7E5E4; transition: transform 0.3s ease;
+    }
+    body.dark .btn-theme { border-color: #44403C; }
+    .btn-theme.spin { transform: rotate(180deg); }
+    .btn-theme .icon { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+    .wrap { max-width: 640px; margin: 0 auto; padding: 2.5rem 1.25rem 4rem; }
+    .page-title { text-align: center; margin-bottom: 1.75rem; }
+    .page-title h1 { font-size: clamp(1.5rem, 4vw, 1.9rem); font-weight: 800; margin-bottom: 0.4rem; }
+    .page-title p { font-size: 0.95rem; color: #78716C; }
+    body.dark .page-title p { color: #A8A29E; }
+    .download-list { display: flex; flex-direction: column; gap: 0.75rem; }
+    .download-item {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 1rem; flex-wrap: wrap;
+      padding: 1rem 1.15rem;
+      border: 1px solid #E7E5E4; border-radius: 1rem; background: #fff;
+    }
+    body.dark .download-item { background: #1C1917; border-color: #292524; }
+    .download-item:hover {
+      border-color: rgba(var(--c-rgb), 0.45);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+    }
+    .download-info { display: flex; align-items: center; gap: 0.85rem; min-width: 0; }
+    .download-icon {
+      width: 44px; height: 44px; border-radius: 0.7rem;
+      background: rgba(var(--c-rgb), 0.12); color: var(--c);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; font-size: 0.65rem; font-weight: 800;
+    }
+    .download-text strong { display: block; font-size: 1rem; margin-bottom: 0.15rem; word-break: break-word; }
+    .download-text span { font-size: 0.8rem; color: #78716C; }
+    body.dark .download-text span { color: #A8A29E; }
+    .download-btn {
+      display: inline-flex; font-size: 0.875rem; font-weight: 600;
+      padding: 0.55rem 1.1rem; border-radius: 999px;
+      background: var(--c); color: #fff; white-space: nowrap;
+    }
+    .download-btn:hover { filter: brightness(0.95); }
+    .empty-state {
+      display: none; text-align: center; padding: 2rem 1.25rem;
+      border: 1px dashed #D6D3D1; border-radius: 1rem; color: #A8A29E; font-size: 0.95rem;
+    }
+    body.dark .empty-state { border-color: #44403C; }
+    .empty-state.visible { display: block; }
+    .hint {
+      margin-top: 1.75rem; padding: 1rem 1.15rem;
+      background: rgba(212,132,154,0.08); border-radius: 0.85rem;
+      font-size: 0.85rem; color: #78716C; line-height: 1.75;
+    }
+    body.dark .hint { color: #A8A29E; }
+    .hint code {
+      direction: ltr; display: inline-block;
+      background: #E7E5E4; color: #1C1917;
+      padding: 0.1rem 0.4rem; border-radius: 0.3rem; font-size: 0.8rem;
+    }
+    body.dark .hint code { background: #292524; color: #FAFAF9; }
+  </style>
+</head>
+<body>
+  <div class="theme-flash" id="themeFlash"></div>
+  <div class="topbar">
+    <a href="index.html" class="back" id="backLink">→ بازگشت به سایت</a>
+    <div class="topbar-actions">
+      <button class="btn-lang" id="langBtn" type="button">EN</button>
+      <button class="btn-theme" type="button" id="themeBtn">
+        <svg class="icon" id="iconSun" style="display:none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+        <svg class="icon" id="iconMoon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="page-title">
+      <h1 id="pageTitle">دانلود فایل‌ها</h1>
+      <p id="pageSub">فایل‌های داخل پوشه downloads</p>
+    </div>
+
+    <div class="download-list" id="downloadList"></div>
+    <div class="empty-state" id="emptyState">لیست فایل خالی است.</div>
+</div>
+
+  <script>
+  /* =========================================================
+     لیست فایل‌های قابل دانلود
+     ۱) فایل را داخل پوشه downloads بگذار
+     ۲) نام فایل را همین‌جا داخل آرایه بنویس
+     ========================================================= */
+  var FILES = [
+    'py herfeay.pdf',
+    'py moghadamati.pdf',
+  ];
+  /* ========================================================= */
+
+  (function () {
+
+    // همگام‌سازی رنگ تم با صفحه اصلی
+    (function syncColorTheme() {
+      var name = localStorage.getItem('colorTheme') || 'rose';
+      var map = {
+        rose:     { c:'#D4849A', soft:'#E8A0BF', rgb:'212, 132, 154' },
+        mint:     { c:'#6BB3A4', soft:'#A8D5C8', rgb:'107, 179, 164' },
+        lavender: { c:'#9B8AC4', soft:'#C4B5E0', rgb:'155, 138, 196' },
+        sky:      { c:'#6B9BD1', soft:'#A8C5E2', rgb:'107, 155, 209' },
+        peach:    { c:'#E0B07A', soft:'#F5D0A9', rgb:'224, 176, 122' },
+        coral:    { c:'#E08B7C', soft:'#F0A89A', rgb:'224, 139, 124' }
+      };
+      var t = map[name] || map.rose;
+      document.body.setAttribute('data-color', name);
+      document.documentElement.style.setProperty('--c', t.c);
+      document.documentElement.style.setProperty('--c-soft', t.soft);
+      document.documentElement.style.setProperty('--c-rgb', t.rgb);
+      document.body.style.setProperty('--c', t.c);
+      document.body.style.setProperty('--c-soft', t.soft);
+      document.body.style.setProperty('--c-rgb', t.rgb);
+    })();
+
+    var lang = localStorage.getItem('lang') || 'fa';
+    var body = document.body;
+    var listEl = document.getElementById('downloadList');
+    var emptyEl = document.getElementById('emptyState');
+
+    function isFa() { return lang === 'fa'; }
+
+    function applyLangUI() {
+      document.documentElement.lang = lang;
+      document.documentElement.dir = isFa() ? 'rtl' : 'ltr';
+      document.getElementById('langBtn').textContent = isFa() ? 'EN' : 'FA';
+      document.getElementById('backLink').textContent = isFa() ? '→ بازگشت به سایت' : '← Back to site';
+      document.getElementById('pageTitle').textContent = isFa() ? 'دانلود فایل‌ها' : 'Downloads';
+      document.getElementById('pageSub').textContent = isFa() ? 'فایل‌های داخل پوشه downloads' : 'Files in the downloads folder';
+      emptyEl.textContent = isFa() ? 'لیست فایل خالی است.' : 'File list is empty.';
+      document.title = isFa() ? 'دانلود فایل‌ها | اهریوان' : 'Downloads | Ahrivan';
+    }
+    applyLangUI();
+    document.getElementById('langBtn').addEventListener('click', function () {
+      lang = isFa() ? 'en' : 'fa';
+      localStorage.setItem('lang', lang);
+      applyLangUI();
+      render();
+    });
+
+    var themeBtn = document.getElementById('themeBtn');
+    var iconSun = document.getElementById('iconSun');
+    var iconMoon = document.getElementById('iconMoon');
+    var flash = document.getElementById('themeFlash');
+    function applyTheme(dark, ev) {
+      if (ev && flash) {
+        flash.style.setProperty('--tx', ((ev.clientX || innerWidth / 2) / innerWidth * 100) + '%');
+        flash.style.setProperty('--ty', ((ev.clientY || innerHeight / 2) / innerHeight * 100) + '%');
+        flash.classList.add('active');
+        setTimeout(function () { flash.classList.remove('active'); }, 400);
+      }
+      themeBtn.classList.add('spin');
+      setTimeout(function () { themeBtn.classList.remove('spin'); }, 300);
+      if (dark) {
+        body.classList.add('dark');
+        iconSun.style.display = 'block';
+        iconMoon.style.display = 'none';
+      } else {
+        body.classList.remove('dark');
+        iconSun.style.display = 'none';
+        iconMoon.style.display = 'block';
+      }
+    }
+    var saved = localStorage.getItem('theme');
+    if (saved === 'dark' || saved === 'light') applyTheme(saved === 'dark');
+    else applyTheme(new Date().getHours() >= 19 || new Date().getHours() < 6);
+    themeBtn.addEventListener('click', function (e) {
+      var d = !body.classList.contains('dark');
+      applyTheme(d, e);
+      localStorage.setItem('theme', d ? 'dark' : 'light');
+    });
+
+    function extLabel(name) {
+      var e = (name.split('.').pop() || 'file').toLowerCase();
+      if (e === 'pdf') return 'PDF';
+      if (e === 'zip' || e === 'rar' || e === '7z') return 'ZIP';
+      if (e === 'doc' || e === 'docx') return 'DOC';
+      if (['png', 'jpg', 'jpeg', 'webp', 'gif'].indexOf(e) >= 0) return 'IMG';
+      return e.slice(0, 4).toUpperCase();
+    }
+    function pretty(file) {
+      return file.replace(/\.[^.]+$/, '').replace(/[-_]+/g, ' ');
+    }
+
+    function render() {
+      listEl.innerHTML = '';
+      var files = (FILES || []).map(function (f) { return String(f).trim(); }).filter(Boolean);
+      if (!files.length) {
+        emptyEl.classList.add('visible');
+        return;
+      }
+      emptyEl.classList.remove('visible');
+      files.forEach(function (file) {
+        var row = document.createElement('div');
+        row.className = 'download-item';
+        row.innerHTML =
+          '<div class="download-info">' +
+            '<div class="download-icon">' + extLabel(file) + '</div>' +
+            '<div class="download-text"><strong>' + pretty(file) + '</strong><span>' + file + '</span></div>' +
+          '</div>' +
+          '<a class="download-btn" href="downloads/' + encodeURIComponent(file) + '" download>' +
+            (isFa() ? 'دانلود' : 'Download') + '</a>';
+        listEl.appendChild(row);
+      });
+    }
+    render();
+  })();
+  </script>
+</body>
+</html>

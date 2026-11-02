@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title data-i18n="pageTitle">رزومه اهریوان | AHRIVAN Resume</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Vazirmatn', system-ui, sans-serif;
+      background: #FAFAF9;
+      color: #1C1917;
+      line-height: 1.75;
+      min-height: 100vh;
+      transition: background-color 0.45s ease, color 0.45s ease;
+    }
+    body.dark { background: #0C0A09; color: #FAFAF9; }
+    a { color: inherit; text-decoration: none; }
+    button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+
+    :root {
+      --c: #D4849A;
+      --c-soft: #E8A0BF;
+      --c-rgb: 212, 132, 154;
+    }
+
+    .theme-flash {
+      position: fixed; inset: 0; z-index: 99999;
+      pointer-events: none; opacity: 0;
+      background: radial-gradient(circle at var(--tx, 50%) var(--ty, 50%), rgba(var(--c-rgb), 0.35), transparent 55%);
+      transition: opacity 0.35s ease;
+    }
+    .theme-flash.active { opacity: 1; }
+
+    .topbar {
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(250,250,249,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid #E7E5E4;
+      padding: 0.85rem 1.25rem;
+      display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+      transition: background-color 0.45s, border-color 0.45s;
+    }
+    body.dark .topbar {
+      background: rgba(12,10,9,0.92);
+      border-bottom-color: #292524;
+    }
+    .topbar a.back {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      font-size: 0.9rem; font-weight: 500; color: #78716C;
+      transition: color 0.2s;
+    }
+    body.dark .topbar a.back { color: #A8A29E; }
+    .topbar a.back:hover { color: var(--c); }
+    .topbar-actions { display: flex; gap: 0.5rem; align-items: center; }
+    .btn-lang {
+      font-size: 0.75rem; font-weight: 600;
+      padding: 0.3rem 0.65rem; border-radius: 999px;
+      border: 1px solid #D6D3D1;
+    }
+    body.dark .btn-lang { border-color: #44403C; }
+    .btn-lang:hover { border-color: var(--c); color: var(--c); }
+    .btn-theme {
+      width: 36px; height: 36px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      border: 1px solid #E7E5E4;
+      transition: transform 0.3s ease, border-color 0.2s, color 0.2s;
+    }
+    body.dark .btn-theme { border-color: #44403C; }
+    .btn-theme:hover { border-color: var(--c); color: var(--c); }
+    .btn-theme.spin { transform: rotate(180deg); }
+    .btn-theme .icon { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+
+    .wrap { max-width: 780px; margin: 0 auto; padding: 2.5rem 1.25rem 4rem; }
+
+    .resume-header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid #E7E5E4;
+      transition: border-color 0.45s;
+    }
+    body.dark .resume-header { border-bottom-color: #292524; }
+
+    /* Orbit profile (like main page) */
+    .orbit-stage {
+      position: relative;
+      width: min(280px, 75vw);
+      height: min(280px, 75vw);
+      margin: 0 auto 1.5rem;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .orbit-glow {
+      position: absolute; inset: 12%;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(var(--c-rgb), 0.25) 0%, rgba(var(--c-rgb), 0.08) 50%, transparent 70%);
+      animation: glowPulse 4s ease-in-out infinite;
+      filter: blur(4px);
+    }
+    .orbit-ring {
+      position: absolute; border-radius: 50%;
+      border: 1.5px dashed transparent;
+      border-top-color: var(--c);
+      border-right-color: #C4B5E0;
+      border-bottom-color: #A8D5C8;
+      border-left-color: #A8C5E2;
+      opacity: 0.55;
+    }
+    .orbit-ring-1 { inset: 0; animation: spin 18s linear infinite; }
+    .orbit-ring-2 {
+      inset: 8%; opacity: 0.35; border-style: solid; border-width: 1px;
+      animation: spin 28s linear infinite reverse;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes glowPulse {
+      0%, 100% { transform: scale(1); opacity: 0.7; }
+      50% { transform: scale(1.06); opacity: 1; }
+    }
+    .avatar-large {
+      position: relative; z-index: 2;
+      width: 58%; height: 58%;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 4px solid rgba(255,255,255,0.9);
+      box-shadow: 0 0 0 6px rgba(var(--c-rgb), 0.18), 0 12px 40px rgba(0,0,0,0.12);
+      background: #E7E5E4;
+      display: flex; align-items: center; justify-content: center;
+    }
+    body.dark .avatar-large {
+      border-color: rgba(28,25,23,0.9);
+      box-shadow: 0 0 0 6px rgba(var(--c-rgb), 0.25), 0 12px 40px rgba(0,0,0,0.4);
+      background: #292524;
+    }
+    .avatar-large img { width: 100%; height: 100%; object-fit: cover; }
+    .avatar-fallback { display: none; font-size: 2.2rem; font-weight: 800; color: #A8A29E; }
+    .avatar-large.no-img .avatar-fallback { display: block; }
+    .avatar-large.no-img img { display: none; }
+    .float-chip {
+      position: absolute; z-index: 3;
+      font-size: 0.68rem; font-weight: 600;
+      padding: 0.3rem 0.65rem; border-radius: 999px;
+      background: #fff; color: #44403C;
+      border: 1px solid #E7E5E4;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+      animation: floatY 4s ease-in-out infinite;
+      white-space: nowrap;
+    }
+    body.dark .float-chip {
+      background: #1C1917; color: #E7E5E4; border-color: #292524;
+    }
+    .chip-1 { top: 8%; right: 0; color: #5BAF9E; animation-delay: 0s; }
+    .chip-2 { top: 22%; left: -4%; color: #6B9BD1; animation-delay: 0.5s; }
+    .chip-3 { bottom: 28%; left: -2%; color: #9B8AC4; animation-delay: 1s; }
+    .chip-4 { bottom: 10%; right: 4%; color: var(--c); animation-delay: 1.4s; }
+    .chip-5 { top: 42%; right: -8%; color: #D4A0B8; animation-delay: 0.8s; }
+    .chip-6 { bottom: 42%; left: -10%; color: #D4B896; animation-delay: 1.8s; }
+    body.dark .chip-1 { color: #8FCFC0; }
+    body.dark .chip-2 { color: #9EC0E8; }
+    body.dark .chip-3 { color: #C9B8F0; }
+    body.dark .chip-5 { color: #E8B4C8; }
+    body.dark .chip-6 { color: #F0C89A; }
+    @keyframes floatY {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    .resume-header h1 {
+      font-size: clamp(1.5rem, 4vw, 2rem);
+      font-weight: 800; margin-bottom: 0.25rem;
+      letter-spacing: 0.02em;
+    }
+    .resume-header .fa-name {
+      font-size: 1.1rem; color: #78716C; margin-bottom: 0.65rem;
+    }
+    body.dark .resume-header .fa-name { color: #A8A29E; }
+    .resume-header .role {
+      color: var(--c); font-weight: 600; font-size: 0.95rem;
+      margin-bottom: 0.75rem; line-height: 1.5;
+    }
+    .resume-header .meta {
+      font-size: 0.85rem; color: #78716C;
+      display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem 1.25rem;
+    }
+    body.dark .resume-header .meta { color: #A8A29E; }
+    .resume-header .meta a { color: var(--c); font-weight: 500; }
+    .resume-header .meta a:hover { text-decoration: underline; }
+
+    .section { margin-bottom: 2.15rem; }
+    .section h2 {
+      font-size: 0.8rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.08em;
+      margin-bottom: 0.85rem;
+      color: var(--c);
+    }
+    .section p { font-size: 0.98rem; color: #44403C; }
+    body.dark .section p { color: #D6D3D1; }
+
+    .job {
+      margin-bottom: 1rem;
+      padding: 1.1rem 1.2rem;
+      border: 1px solid #E7E5E4;
+      border-radius: 0.9rem;
+      background: #fff;
+      transition: background-color 0.45s, border-color 0.45s;
+    }
+    body.dark .job {
+      background: #1C1917;
+      border-color: #292524;
+    }
+    .job strong { display: block; font-size: 1rem; margin-bottom: 0.35rem; }
+    .job p { font-size: 0.92rem; color: #57534E; }
+    body.dark .job p { color: #A8A29E; }
+
+    .chips { display: flex; flex-wrap: wrap; gap: 0.45rem; }
+    .chip {
+      font-size: 0.8rem; font-weight: 500;
+      padding: 0.4rem 0.85rem; border-radius: 999px;
+      background: rgba(var(--c-rgb), 0.12);
+      color: var(--c);
+    }
+    body.dark .chip {
+      background: rgba(var(--c-rgb), 0.18);
+      color: var(--c-soft);
+    }
+
+    .cert-list { list-style: none; display: flex; flex-direction: column; gap: 0.75rem; }
+    .cert-list li {
+      padding: 0.85rem 1rem;
+      border-radius: 0.75rem;
+      border: 1px solid #E7E5E4;
+      background: #fff;
+      font-size: 0.92rem;
+      color: #44403C;
+      transition: background-color 0.45s, border-color 0.45s;
+    }
+    body.dark .cert-list li {
+      background: #1C1917;
+      border-color: #292524;
+      color: #D6D3D1;
+    }
+    .cert-list li strong { display: block; color: #1C1917; margin-bottom: 0.15rem; }
+    body.dark .cert-list li strong { color: #FAFAF9; }
+    .cert-list li span { font-size: 0.8rem; color: #78716C; }
+    body.dark .cert-list li span { color: #A8A29E; }
+
+    .links-row { display: flex; flex-wrap: wrap; gap: 0.75rem 1.5rem; font-size: 0.95rem; }
+    .links-row a { color: var(--c); font-weight: 600; }
+    .links-row a:hover { text-decoration: underline; }
+
+    .cert-section {
+      margin-top: 2.5rem;
+      padding-top: 2rem;
+      border-top: 1px solid #E7E5E4;
+    }
+    body.dark .cert-section { border-top-color: #292524; }
+    .cert-section h2 {
+      font-size: 0.8rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.08em;
+      margin-bottom: 1rem;
+      color: var(--c);
+    }
+    .cert-grid {
+      display: flex; flex-wrap: wrap; gap: 1rem;
+      justify-content: center; align-items: stretch;
+    }
+    .cert-card {
+      flex: 1 1 calc(50% - 0.5rem);
+      max-width: calc(50% - 0.5rem);
+      min-width: 0;
+      border: 1px solid #E7E5E4;
+      border-radius: 0.85rem;
+      overflow: hidden;
+      background: #fff;
+      transition: transform 0.2s, box-shadow 0.2s, border-color 0.45s, background-color 0.45s;
+    }
+    body.dark .cert-card { background: #1C1917; border-color: #292524; }
+    .cert-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
+    .cert-card a { display: block; width: 100%; background: #F5F5F4; }
+    body.dark .cert-card a { background: #292524; }
+    .cert-card img { width: 100%; height: auto; object-fit: contain; display: block; }
+    @media (min-width: 700px) {
+      .cert-card { flex: 1 1 calc(25% - 0.75rem); max-width: calc(25% - 0.75rem); }
+    }
+
+    .print-hint { text-align: center; margin-top: 2rem; font-size: 0.8rem; color: #A8A29E; }
+    @media print {
+      .topbar, .print-hint, .btn-lang, .btn-theme { display: none !important; }
+      body { background: #fff; color: #000; }
+    }
+  </style>
+</head>
+<body>
+  <div class="theme-flash" id="themeFlash"></div>
+  <div class="topbar">
+    <a href="index.html" class="back" data-i18n="back">→ بازگشت به سایت</a>
+    <div class="topbar-actions">
+      <button class="btn-lang" id="langBtn" type="button">EN</button>
+      <button class="btn-theme" type="button" id="themeBtn" aria-label="Theme">
+        <svg class="icon" id="iconSun" style="display:none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+        <svg class="icon" id="iconMoon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <header class="resume-header">
+      <div class="orbit-stage">
+        <div class="orbit-ring orbit-ring-1"></div>
+        <div class="orbit-ring orbit-ring-2"></div>
+        <div class="orbit-glow"></div>
+        <div class="avatar-large">
+          <img src="profile.jpg" alt="Ahrivan"
+               onerror="this.style.display='none'; this.parentElement.classList.add('no-img');" />
+          <div class="avatar-fallback">اه</div>
+        </div>
+        <span class="float-chip chip-1">Python</span>
+        <span class="float-chip chip-2">HTML</span>
+        <span class="float-chip chip-3">CSS</span>
+        <span class="float-chip chip-4">UI/UX</span>
+        <span class="float-chip chip-5">Logo</span>
+        <span class="float-chip chip-6">JS</span>
+      </div>
+      <h1 data-i18n="nameEn">AHRIVAN</h1>
+      <p class="fa-name" data-i18n="nameFa">اهریوان</p>
+      <p class="role" data-i18n="role">AI Engineer · Python Developer · Web &amp; Graphic Designer</p>
+      <div class="meta">
+        <span data-i18n="location">سمنان، سرخه</span>
+        <a href="https://github.com/ahurivan" target="_blank" rel="noopener">github.com/ahurivan</a>
+        <a href="https://instagram.com/AhR1VaNx" target="_blank" rel="noopener">@AhR1VaNx</a>
+      </div>
+    </header>
+
+    <section class="section">
+      <h2 data-i18n="aboutTitle">درباره من</h2>
+      <p data-i18n="aboutText">توسعه‌دهنده پایتون و طراح؛ ساخت وب‌سایت، هویت برند و ربات‌های اتوماسیون برای مشتریان بین‌المللی — از لوگو تا لندینگ تا محصول نهایی.</p>
+    </section>
+
+    <section class="section">
+      <h2 data-i18n="servicesTitle">خدمات</h2>
+      <div class="chips">
+        <span class="chip" data-i18n="s1">هویت برند و طراحی لوگو</span>
+        <span class="chip" data-i18n="s2">لندینگ و طراحی سایت</span>
+        <span class="chip" data-i18n="s3">طراحی ربات و اتوماسیون</span>
+        <span class="chip" data-i18n="s4">ابزارهای مبتنی بر AI</span>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 data-i18n="expTitle">سوابق</h2>
+      <div class="job">
+        <strong data-i18n="expJob">طراح و توسعه‌دهنده فریلنسر</strong>
+        <p data-i18n="expText">همکاری با مشتریان در آمریکا، روسیه، آلمان، عربستان و انگلیس — طراحی وب، هویت گرافیکی، اتوماسیون پایتون و ابزارهای مرتبط با AI.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 data-i18n="certTitle">مدارک</h2>
+      <ul class="cert-list">
+        <li>
+          <strong data-i18n="c1t">PCEP – برنامه‌نویس پایتون سطح ورودی</strong>
+          <span data-i18n="c1s">Python Institute · ۲۰۲۰</span>
+        </li>
+        <li>
+          <strong data-i18n="c2t">طراحی وب و بازاریابی دیجیتال</strong>
+          <span data-i18n="c2s">MPT Academy · ۲۰۱۹</span>
+        </li>
+        <li>
+          <strong data-i18n="c3t">مدارک فنی و حرفه‌ای</strong>
+          <span data-i18n="c3s">مهارت‌های کامپیوتر و هوش مصنوعی</span>
+        </li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <h2 data-i18n="linksTitle">لینک‌ها</h2>
+      <div class="links-row">
+        <a href="https://github.com/ahurivan" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://instagram.com/AhR1VaNx" target="_blank" rel="noopener">Instagram</a>
+        <a href="https://t.me/AhR1VaNx" target="_blank" rel="noopener">Telegram</a>
+      </div>
+    </section>
+
+    <section class="cert-section" id="certificates">
+      <h2 data-i18n="certImagesTitle">تصاویر مدارک</h2>
+      <div class="cert-grid">
+        <div class="cert-card"><a href="certs/cert-1.jpg" target="_blank" rel="noopener"><img src="certs/cert-1.jpg" alt="Cert 1" onerror="this.parentElement.parentElement.style.display='none'" /></a></div>
+        <div class="cert-card"><a href="certs/cert-2.jpg" target="_blank" rel="noopener"><img src="certs/cert-2.jpg" alt="Cert 2" onerror="this.parentElement.parentElement.style.display='none'" /></a></div>
+        <div class="cert-card"><a href="certs/cert-3.jpg" target="_blank" rel="noopener"><img src="certs/cert-3.jpg" alt="Cert 3" onerror="this.parentElement.parentElement.style.display='none'" /></a></div>
+        <div class="cert-card"><a href="certs/cert-4.jpg" target="_blank" rel="noopener"><img src="certs/cert-4.jpg" alt="Cert 4" onerror="this.parentElement.parentElement.style.display='none'" /></a></div>
+      </div>
+    </section>
+
+    <p class="print-hint" data-i18n="printHint">چاپ / ذخیره PDF: Ctrl+P</p>
+  </div>
+
+  <script>
+  (function () {
+
+    // همگام‌سازی رنگ تم با صفحه اصلی
+    (function syncColorTheme() {
+      var name = localStorage.getItem('colorTheme') || 'rose';
+      var map = {
+        rose:     { c:'#D4849A', soft:'#E8A0BF', rgb:'212, 132, 154' },
+        mint:     { c:'#6BB3A4', soft:'#A8D5C8', rgb:'107, 179, 164' },
+        lavender: { c:'#9B8AC4', soft:'#C4B5E0', rgb:'155, 138, 196' },
+        sky:      { c:'#6B9BD1', soft:'#A8C5E2', rgb:'107, 155, 209' },
+        peach:    { c:'#E0B07A', soft:'#F5D0A9', rgb:'224, 176, 122' },
+        coral:    { c:'#E08B7C', soft:'#F0A89A', rgb:'224, 139, 124' }
+      };
+      var t = map[name] || map.rose;
+      document.body.setAttribute('data-color', name);
+      document.documentElement.style.setProperty('--c', t.c);
+      document.documentElement.style.setProperty('--c-soft', t.soft);
+      document.documentElement.style.setProperty('--c-rgb', t.rgb);
+      document.body.style.setProperty('--c', t.c);
+      document.body.style.setProperty('--c-soft', t.soft);
+      document.body.style.setProperty('--c-rgb', t.rgb);
+    })();
+
+    var dict = {
+      fa: {
+        pageTitle: 'رزومه اهریوان | AHRIVAN Resume',
+        back: '→ بازگشت به سایت',
+        nameEn: 'AHRIVAN', nameFa: 'اهریوان',
+        role: 'مهندس هوش مصنوعی · توسعه‌دهنده پایتون · طراح وب و گرافیک',
+        location: 'سمنان، سرخه',
+        aboutTitle: 'درباره من',
+        aboutText: 'توسعه‌دهنده پایتون و طراح؛ ساخت وب‌سایت، هویت برند و ربات‌های اتوماسیون برای مشتریان بین‌المللی — از لوگو تا لندینگ تا محصول نهایی.',
+        servicesTitle: 'خدمات',
+        s1: 'هویت برند و طراحی لوگو', s2: 'لندینگ و طراحی سایت', s3: 'طراحی ربات و اتوماسیون', s4: 'ابزارهای مبتنی بر AI',
+        expTitle: 'سوابق',
+        expJob: 'طراح و توسعه‌دهنده فریلنسر',
+        expText: 'همکاری با مشتریان در آمریکا، روسیه، آلمان، عربستان و انگلیس — طراحی وب، هویت گرافیکی، اتوماسیون پایتون و ابزارهای مرتبط با AI.',
+        certTitle: 'مدارک',
+        c1t: 'PCEP – برنامه‌نویس پایتون سطح ورودی', c1s: 'Python Institute · ۲۰۲۰',
+        c2t: 'طراحی وب و بازاریابی دیجیتال', c2s: 'MPT Academy · ۲۰۱۹',
+        c3t: 'مدارک فنی و حرفه‌ای', c3s: 'مهارت‌های کامپیوتر و هوش مصنوعی',
+        linksTitle: 'لینک‌ها',
+        certImagesTitle: 'تصاویر مدارک',
+        printHint: 'چاپ / ذخیره PDF: Ctrl+P'
+      },
+      en: {
+        pageTitle: 'AHRIVAN Resume | اهریوان',
+        back: '← Back to site',
+        nameEn: '𝐀𝐡𝐫𝐢𝐯𝐚𝐧', nameFa: 'اهریوان',
+        role: 'AI Engineer · Python Developer · Web & Graphic Designer',
+        location: 'Semnan, Sorkheh',
+        aboutTitle: 'About',
+        aboutText: 'Python developer and designer building websites, brand identities, and automation bots for international clients — from logo to landing page to a working product.',
+        servicesTitle: 'Services',
+        s1: 'Brand identity & logo design', s2: 'Landing pages & website design', s3: 'Bot design & automation', s4: 'AI-based tools',
+        expTitle: 'Experience',
+        expJob: 'Freelance Designer & Developer',
+        expText: 'Working with clients in the USA, Russia, Germany, Saudi Arabia, and the UK — web design, graphic identity, Python automation, and AI-related tools end to end.',
+        certTitle: 'Certifications',
+        c1t: 'PCEP – Certified Entry-Level Python Programmer', c1s: 'Python Institute · 2020',
+        c2t: 'Web Design and Digital Marketing', c2s: 'MPT Academy · 2019',
+        c3t: 'Technical & Vocational Certificates', c3s: 'Computer Skills and AI',
+        linksTitle: 'Links',
+        certImagesTitle: 'Certificate images',
+        printHint: 'Print / Save as PDF: Ctrl+P'
+      }
+    };
+
+    var body = document.body;
+    var langBtn = document.getElementById('langBtn');
+    var themeBtn = document.getElementById('themeBtn');
+    var iconSun = document.getElementById('iconSun');
+    var iconMoon = document.getElementById('iconMoon');
+    var flash = document.getElementById('themeFlash');
+    var lang = localStorage.getItem('lang') || 'fa';
+
+    function applyLang(l) {
+      lang = l;
+      localStorage.setItem('lang', l);
+      var d = dict[l];
+      document.documentElement.lang = l;
+      document.documentElement.dir = l === 'fa' ? 'rtl' : 'ltr';
+      langBtn.textContent = l === 'fa' ? 'EN' : 'FA';
+      var nodes = document.querySelectorAll('[data-i18n]');
+      for (var i = 0; i < nodes.length; i++) {
+        var key = nodes[i].getAttribute('data-i18n');
+        if (d[key] !== undefined) nodes[i].textContent = d[key];
+      }
+      if (d.pageTitle) document.title = d.pageTitle;
+    }
+    applyLang(lang);
+    langBtn.addEventListener('click', function () {
+      applyLang(lang === 'fa' ? 'en' : 'fa');
+    });
+
+    function applyTheme(dark, fromEvent) {
+      if (fromEvent && flash) {
+        var x = 50, y = 50;
+        if (fromEvent.clientX) {
+          x = (fromEvent.clientX / window.innerWidth) * 100;
+          y = (fromEvent.clientY / window.innerHeight) * 100;
+        }
+        flash.style.setProperty('--tx', x + '%');
+        flash.style.setProperty('--ty', y + '%');
+        flash.classList.add('active');
+        setTimeout(function () { flash.classList.remove('active'); }, 400);
+      }
+      themeBtn.classList.add('spin');
+      setTimeout(function () { themeBtn.classList.remove('spin'); }, 300);
+      if (dark) {
+        body.classList.add('dark');
+        iconSun.style.display = 'block';
+        iconMoon.style.display = 'none';
+      } else {
+        body.classList.remove('dark');
+        iconSun.style.display = 'none';
+        iconMoon.style.display = 'block';
+      }
+    }
+
+    var savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark' || savedTheme === 'light') {
+      applyTheme(savedTheme === 'dark', null);
+    } else {
+      var h = new Date().getHours();
+      applyTheme(h >= 19 || h < 6, null);
+    }
+    themeBtn.addEventListener('click', function (e) {
+      var goingDark = !body.classList.contains('dark');
+      applyTheme(goingDark, e);
+      localStorage.setItem('theme', goingDark ? 'dark' : 'light');
+    });
+  })();
+  </script>
+</body>
+</html>
